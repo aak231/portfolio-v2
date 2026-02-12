@@ -67,11 +67,22 @@ export default function DecisionField() {
     });
     // Global time accumulator
     let t = 0;
+    let lastScroll = window.scrollY;
+    let scrollVelocity = 0;
+
+    window.addEventListener("scroll", () => {
+      const current = window.scrollY;
+      scrollVelocity = current - lastScroll;
+      lastScroll = current;
+    });
     // Runs every frame via requestAnimationFrame
+    // ------------------------------------------------------------------------------------------------------------
+    // main loop
     const loop = (time: number) => {
       if (!ctx) return;
       // Creates slow evolving wave motion
       t += 0.01;
+
       // Computes movement speed
       const mouseVX = mouse.x - mouse.px;
       const mouseVY = mouse.y - mouse.py;
@@ -102,11 +113,16 @@ export default function DecisionField() {
 
       const nodes = nodesRef.current;
 
+      // --- PARTICLE UPDATE LOOP (O(n)) ---
       for (let i = 0; i < activeCountRef.current; i++) {
         const n = nodes[i];
-        //This creates smooth, continuous vector flow
+
+        // This creates smooth, continuous vector flow
         n.vx += Math.sin(n.y * 0.002 + t) * 0.02;
         n.vy += Math.cos(n.x * 0.002 + t) * 0.02;
+
+        const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+        const glow = Math.min(speed * 4, 1);
 
         // Anchor pull
         // This pulls particles back toward origin
@@ -116,16 +132,20 @@ export default function DecisionField() {
         n.vx += dx * 0.00015;
         n.vy += dy * 0.00015;
 
-        // Mouse repulsion
+        // scroll physics
+        scrollVelocity *= 0.9; // decay
+        n.vy += scrollVelocity * 0.01;
+
+        // Mouse influence
         const mx = n.x - mouse.x;
         const my = n.y - mouse.y;
         const dist = Math.sqrt(mx * mx + my * my);
+
         // radius of influence
         if (dist < 180 && dist > 0.01) {
           const influence = (180 - dist) / 180;
 
           // Tangential force (perpendicular to mouse direction)
-          // This rotates the influence 90 degrees
           const flowX = -mouseVY;
           const flowY = mouseVX;
 
@@ -134,23 +154,51 @@ export default function DecisionField() {
           n.vx += flowX * influence * flowStrength * 0.02;
           n.vy += flowY * influence * flowStrength * 0.02;
         }
+
         // simulates friction
         n.vx *= 0.9;
         n.vy *= 0.9;
+
         // Velocity integration
         n.x += n.vx;
         n.y += n.vy;
+
         // Rendering
         ctx.beginPath();
         ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(251, 191, 36, 0.8)"; // amber-400
+        ctx.fillStyle = `rgba(251,191,36,${0.3 + glow * 0.7})`;
         ctx.fill();
       }
-      //Frame Recursion
+
+      // --- CONNECTION LOOP (O(n²)) ---
+      for (let i = 0; i < activeCountRef.current; i++) {
+        for (let j = i + 1; j < activeCountRef.current; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const distSq = dx * dx + dy * dy;
+          const maxDist = 130;
+          const maxDistSq = maxDist * maxDist;
+
+          if (distSq < maxDistSq) {
+            const dist = Math.sqrt(distSq); // only compute sqrt when needed
+            //lines between the dots
+            const normalized = 1 - dist / maxDist;
+            const alpha = normalized * normalized * 0.25;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(255, 180, 50, ${alpha})`;
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Frame Recursion
       requestAnimationFrame(loop);
     };
 
-    requestAnimationFrame(loop);
+    requestAnimationFrame(loop); // initial start
 
     return () => {
       window.removeEventListener("resize", resize);
