@@ -27,7 +27,7 @@ jobs:
       # Build Vite project
       - name: Build project
         run: npm run build
-
+      # testing again
       # Sync dist folder to S3
       - name: Deploy to S3
         run: |
