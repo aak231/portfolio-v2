@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import DecisionField from "./animations/DecisionField";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-amber-500">
-        Portfolio V2 is Alive
-      </h1>
+    <div className="min-h-screen w-full bg-neutral-950 text-neutral-100">
+      <DecisionField />
+
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <h1 className="text-5xl font-bold text-amber-500 relative z-10">
+          Portfolio V2
+        </h1>
+      </div>
     </div>
   );
 }
