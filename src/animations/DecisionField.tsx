@@ -9,7 +9,8 @@ type Node = {
   baseY: number;
 };
 // Global config
-const MAX_NODES = 300;
+const isMobile = window.innerWidth < 768;
+const MAX_NODES = isMobile ? 120 : 300;
 
 export default function DecisionField() {
   // React Refs
@@ -17,7 +18,7 @@ export default function DecisionField() {
   // persistent particle array
   const nodesRef = useRef<Node[]>([]);
   // dynamic particle count
-  const activeCountRef = useRef<number>(100);
+  const activeCountRef = useRef<number>(window.innerWidth < 768 ? 60 : 100);
   // Rolling FPS samples
   const fpsRef = useRef<number[]>([]);
   // Stores previous animation timestamp
@@ -45,7 +46,7 @@ export default function DecisionField() {
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     const resize = () => {
       // Matches canvas to viewport
       canvas.width = window.innerWidth;
@@ -155,7 +156,9 @@ export default function DecisionField() {
       const complexity = Math.min(scrollProgress * 1.2, 1);
 
       // Connection distance grows with scroll
-      const dynamicThreshold = 80 + complexity * 100;
+      const baseThreshold = isMobile ? 60 : 80;
+      const dynamicThreshold =
+        baseThreshold + complexity * (isMobile ? 60 : 100);
       const dynamicThresholdSq = dynamicThreshold * dynamicThreshold;
 
       // Vertical compression strength

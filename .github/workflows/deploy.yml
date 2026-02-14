@@ -31,7 +31,9 @@ jobs:
       # Sync dist folder to S3
       - name: Deploy to S3
         run: |
-          aws s3 sync dist s3://ahadk.com --delete
+          aws s3 sync dist s3://ahadk.com \
+          --delete \
+          --cache-control "no-cache"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
