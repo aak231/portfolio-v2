@@ -67,19 +67,44 @@ export default function DecisionField() {
     });
     // Global time accumulator
     let t = 0;
+    // Scroll Tracking
+    let scrollProgress = 0;
     let lastScroll = window.scrollY;
     let scrollVelocity = 0;
 
-    window.addEventListener("scroll", () => {
+    const updateScroll = () => {
       const current = window.scrollY;
       scrollVelocity = current - lastScroll;
       lastScroll = current;
-    });
+
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+      scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    };
+
+    updateScroll();
+    window.addEventListener("scroll", updateScroll);
     // Runs every frame via requestAnimationFrame
     // ------------------------------------------------------------------------------------------------------------
     // main loop
     const loop = (time: number) => {
       if (!ctx) return;
+
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width,
+      );
+
+      gradient.addColorStop(0, "#242426");
+      gradient.addColorStop(1, "#1a1a1c");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       // Creates slow evolving wave motion
       t += 0.01;
 
@@ -109,8 +134,16 @@ export default function DecisionField() {
         activeCountRef.current += 2;
       }
       // Erases previous frame
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Scroll Based Complexity
+      const complexity = Math.min(scrollProgress * 1.2, 1);
 
+      // Connection distance grows with scroll
+      const dynamicThreshold = 80 + complexity * 100;
+      const dynamicThresholdSq = dynamicThreshold * dynamicThreshold;
+
+      // Vertical compression strength
+      const compressionStrength = complexity * 0.0006;
       const nodes = nodesRef.current;
 
       // --- PARTICLE UPDATE LOOP (O(n)) ---
@@ -135,6 +168,10 @@ export default function DecisionField() {
         // scroll physics
         scrollVelocity *= 0.9; // decay
         n.vy += scrollVelocity * 0.01;
+        // Vertical compression toward center
+        const centerY = canvas.height / 2;
+        const compressForce = (centerY - n.y) * compressionStrength;
+        n.vy += compressForce;
 
         // Mouse influence
         const mx = n.x - mouse.x;
@@ -166,7 +203,8 @@ export default function DecisionField() {
         // Rendering
         ctx.beginPath();
         ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(251,191,36,${0.3 + glow * 0.7})`;
+        // ctx.fillStyle = `rgba(251,191,36,${0.3 + glow * 0.7})`;
+        ctx.fillStyle = `rgba(251,191,36,${0.25 + glow * 0.6})`;
         ctx.fill();
       }
 
@@ -176,19 +214,30 @@ export default function DecisionField() {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const distSq = dx * dx + dy * dy;
-          const maxDist = 130;
-          const maxDistSq = maxDist * maxDist;
 
-          if (distSq < maxDistSq) {
-            const dist = Math.sqrt(distSq); // only compute sqrt when needed
-            //lines between the dots
-            const normalized = 1 - dist / maxDist;
-            const alpha = normalized * normalized * 0.25;
+          const threshold = 100;
+          const thresholdSq = threshold * threshold;
+
+          if (distSq < dynamicThresholdSq) {
+            const dist = Math.sqrt(distSq);
+            const proximity = 1 - dist / dynamicThreshold;
+
+            // --- Base Line ---
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(255, 180, 50, ${alpha})`;
-            ctx.lineWidth = 1.4;
+
+            ctx.strokeStyle = `rgba(251,191,36,${0.12 + proximity * 0.18})`;
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+
+            // --- Soft Glow Overlay ---
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+
+            ctx.strokeStyle = `rgba(251,191,36,${proximity * 0.25})`;
+            ctx.lineWidth = 3;
             ctx.stroke();
           }
         }
