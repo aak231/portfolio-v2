@@ -215,8 +215,6 @@ export default function DecisionField() {
           const dy = nodes[i].y - nodes[j].y;
           const distSq = dx * dx + dy * dy;
 
-          const threshold = 100;
-          const thresholdSq = threshold * threshold;
 
           if (distSq < dynamicThresholdSq) {
             const dist = Math.sqrt(distSq);
