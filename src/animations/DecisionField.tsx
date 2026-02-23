@@ -108,17 +108,28 @@ export default function DecisionField() {
     const loop = (time: number) => {
       if (!ctx) return;
 
+      // const gradient = ctx.createRadialGradient(
+      //   canvas.width / 2,
+      //   canvas.height / 2,
+      //   0,
+      //   canvas.width / 2,
+      //   canvas.height / 2,
+      //   canvas.width,
+      // );
       const gradient = ctx.createRadialGradient(
         canvas.width / 2,
-        canvas.height / 2,
+        canvas.height * 0.35,
         0,
         canvas.width / 2,
-        canvas.height / 2,
+        canvas.height * 0.35,
         canvas.width,
       );
 
-      gradient.addColorStop(0, "#242426");
-      gradient.addColorStop(1, "#1a1a1c");
+      // gradient.addColorStop(0, "#242426");
+      // gradient.addColorStop(1, "#1a1a1c");
+      gradient.addColorStop(0, "#19191b");
+      gradient.addColorStop(0.7, "#121214");
+      gradient.addColorStop(1, "#0a0a0d");
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -234,7 +245,6 @@ export default function DecisionField() {
           const dy = nodes[i].y - nodes[j].y;
           const distSq = dx * dx + dy * dy;
 
-
           if (distSq < dynamicThresholdSq) {
             const dist = Math.sqrt(distSq);
             const proximity = 1 - dist / dynamicThreshold;
@@ -249,13 +259,13 @@ export default function DecisionField() {
             ctx.stroke();
 
             // --- Soft Glow Overlay ---
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
+            // ctx.beginPath();
+            // ctx.moveTo(nodes[i].x, nodes[i].y);
+            // ctx.lineTo(nodes[j].x, nodes[j].y);
 
-            ctx.strokeStyle = `rgba(251,191,36,${proximity * 0.25})`;
-            ctx.lineWidth = 3;
-            ctx.stroke();
+            // ctx.strokeStyle = `rgba(251,191,36,${proximity * 0.25})`;
+            // ctx.lineWidth = 3;
+            // ctx.stroke();
           }
         }
       }

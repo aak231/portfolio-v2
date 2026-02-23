@@ -5,23 +5,10 @@ export default function Hero() {
   return (
     <section className="relative z-10 min-h-screen flex items-start pt-[18vh] px-6 md:px-8">
       <div className="w-full max-w-6xl mx-auto flex justify-center">
-        <GlassSurface
-          width="100%"
-          height="auto"
-          className="max-w-5xl rounded-3xl p-10 md:p-16"
-          displace={0.6}
-          distortionScale={-220}
-          redOffset={0}
-          greenOffset={8}
-          blueOffset={18}
-          brightness={65}
-          opacity={0.92}
-          blur={14}
-          mixBlendMode="screen"
-        >
+        <GlassSurface className="max-w-5xl p-10 md:p-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
-              <h1 className="text-6xl font-semibold text-white tracking-tight">
+              <h1 className="text-7xl font-bold text-white tracking-tight">
                 Ahad Khan
               </h1>
 
