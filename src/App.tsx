@@ -2,7 +2,7 @@ import DecisionField from "./animations/DecisionField";
 import Hero from "./components/Hero";
 export default function App() {
   return (
-    <div className="min-h-screen w-full bg-zinc-900 text-neutral-100">
+    <div className="min-h-screen w-full bg-green-600 text-neutral-100">
       <DecisionField />
 
       {/* Animated Background */}
@@ -13,7 +13,7 @@ export default function App() {
 
       {/* Temporary scroll space for testing */}
       <div className="h-[200vh]" />
-      
+
     </div>
   );
 }
