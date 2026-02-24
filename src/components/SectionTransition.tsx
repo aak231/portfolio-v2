@@ -1,7 +1,9 @@
 export default function SectionTransition() {
   return (
-    <div className="relative z-10 h-32 md:h-40">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
+    <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-8">
+      <div className="flex justify-center py-12">
+        <div className="w-40 h-px bg-white/10" />
+      </div>
     </div>
   );
 }
