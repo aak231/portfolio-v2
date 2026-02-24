@@ -3,7 +3,6 @@ import Hero from "./components/Hero";
 import Projects from "@/components/Projects";
 import OperatingModel from "./components/OperatingModel";
 import OperatingDiagram from "./components/OperatingDiagram";
-import SectionTransition from "./components/SectionTransition";
 export default function App() {
   return (
     <div className="min-h-screen w-full bg-[#0a0a0d] text-neutral-100">
