@@ -7,7 +7,7 @@ export default function Projects() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className="relative z-10 py-32 px-6 md:px-8">
+    <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-16">
