@@ -10,6 +10,15 @@ export default function OperatingDiagram() {
   return (
     <section className="relative z-10 py-16 md:py-20">
       <div className="max-w-6xl mx-auto px-6">
+        <div className="mb-14">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white">
+            Decision Loop
+          </h2>
+          <p className="text-zinc-500 mt-4 max-w-2xl">
+            From user behavior to optimization, product growth is a continuous
+            feedback system.
+          </p>
+        </div>
         <div
           className="
             bg-zinc-900/60

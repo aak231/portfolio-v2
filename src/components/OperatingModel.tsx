@@ -2,6 +2,15 @@ export default function OperatingModel() {
   return (
     <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-16">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white">
+            Operating Principles
+          </h2>
+          <p className="text-zinc-500 mt-4 max-w-2xl">
+            The systems mindset I apply to product strategy, execution, and
+            iteration.
+          </p>
+        </div>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             {

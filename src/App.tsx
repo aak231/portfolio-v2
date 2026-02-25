@@ -32,8 +32,11 @@ export default function App() {
         <Hero />
         <SectionTransition />
         <Projects />
+        <SectionTransition />
         <OperatingModel />
+        <SectionTransition />
         <OperatingDiagram />
+        <SectionTransition />
         <div className="h-[50vh]" />
       </div>
     </div>
