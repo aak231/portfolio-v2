@@ -10,6 +10,9 @@ export default function Projects() {
     <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
+        <span className="text-xs tracking-widest uppercase text-zinc-500">
+          Milestones
+        </span>
         <div className="flex justify-between items-center mb-16">
           <h2 className="text-3xl md:text-4xl font-semibold text-white">
             Selected Impact
