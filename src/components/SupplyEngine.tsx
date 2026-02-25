@@ -8,7 +8,7 @@ export default function SupplyEngine() {
     <FeaturedSystem
       label="Supply Engine"
       title="Designing the Seller Leads Marketplace"
-      description="Transforming fragmented seller intent into a structured, qualified and monetizable supply system across Bayut and dubizzle."
+      description="Multi entrypoint intent capture across Bayut and dubizzle, supported by behavioral triggers and structured validation rules."
       steps={[
         "Intent Capture",
         "Qualification",
@@ -23,15 +23,15 @@ export default function SupplyEngine() {
         },
         {
           title: "Qualification System",
-          desc: "Ops moderation panel, WhatsApp verification flows and BI validation thresholds improving trust and unlock velocity.",
+          desc: "Human and automated qualification layers including moderation via an Operations team, WhatsApp verification and BI pricing validation to increase trust and lead quality.",
         },
         {
           title: "Marketplace Engine",
-          desc: "Credit based unlock model with timed tiered access, emirate flags and preference driven visibility logic.",
+          desc: "Credit driven unlock engine with timed access controls, emirate visibility flags and preference based distribution logic.",
         },
         {
           title: "Monetization Logic",
-          desc: "Flat rate pilot pricing evolving toward dynamic pricing based on intent, commission potential and qualification status.",
+          desc: "Pilot flat pricing evolving toward dynamic pricing based on intent strength, commission potential, market demand and qualification status.",
         },
       ]}
       ctaText="Explore Full Architecture"

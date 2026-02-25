@@ -19,7 +19,7 @@ export default function OperatingModel() {
             {
               title: "Instrument Before Opinion",
               points: [
-                "Define north star and guardrail metrics",
+                "Define measurable north star and guardrail metrics before shipping solutions.",
                 "Design event taxonomy across funnels",
                 "Establish behavioral baselines",
               ],
@@ -27,7 +27,7 @@ export default function OperatingModel() {
             {
               title: "Optimize Systems, Not Screens",
               points: [
-                "Diagnose structural drop offs",
+                "Diagnose structural drop offs across funnels and feedback loops",
                 "Balance supply and demand dynamics",
                 "Quantify marginal performance lift",
               ],
@@ -37,7 +37,7 @@ export default function OperatingModel() {
               points: [
                 "Cohort based analysis",
                 "Experiment impact measurement",
-                "Translate signals into roadmap direction",
+                "Translate behavioral signals into prioritization and roadmap direction",
               ],
             },
           ].map((item) => (

@@ -49,7 +49,7 @@ export default function Projects() {
           <ImpactCard
             metric="8K+"
             title="Seller Leads in 4 Months"
-            description="Seller acquisition funnel capturing high-intent property owners."
+            description="Designed and optimized a seller acquisition system converting fragmented intent into structured marketplace supply."
             contributions={[
               "Defined acquisition metrics",
               "Designed lead quality scoring framework",

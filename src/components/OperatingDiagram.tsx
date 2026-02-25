@@ -15,8 +15,8 @@ export default function OperatingDiagram() {
             Decision Loop
           </h2>
           <p className="text-zinc-500 mt-4 max-w-2xl">
-            From user behavior to optimization, product growth is a continuous
-            feedback system.
+            Product growth is a continuous feedback loop from behavior to
+            insight to optimized execution.
           </p>
         </div>
         <div

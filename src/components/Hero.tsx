@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import HeroImage from "./HeroImage";
 import GlassSurface from "@/components/GlassSurface";
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="relative z-10 min-h-[85vh] flex items-start pt-[12vh] pb-12 md:pb-16 px-6 md:px-8">
       <div className="w-full max-w-6xl mx-auto flex justify-center">
@@ -17,23 +20,24 @@ export default function Hero() {
               </h2>
 
               <p className="text-lg text-white/70 max-w-xl leading-relaxed">
-                I build and scale product systems powered by data. From growth
-                analytics to infrastructure decisions, I operate where product
-                thinking meets technical execution.
+                I design and scale product systems powered by data. From growth
+                funnels to marketplace infrastructure, I operate at the
+                intersection of product, data and execution.
               </p>
 
               <button
+                onClick={() => navigate("/systems-in-practice")}
                 className="
-                border border-amber-400/70 
-                text-amber-400 
-                px-6 py-3 
-                rounded-2xl 
-                hover:bg-amber-400 
-                hover:text-black 
-                transition-all duration-300
-              "
+                  border border-amber-400/70 
+                  text-amber-400 
+                  px-6 py-3 
+                  rounded-2xl 
+                  hover:bg-amber-400 
+                  hover:text-black 
+                  transition-all duration-300
+                "
               >
-                View Selected Work
+                View Systems in Practice
               </button>
             </div>
 
