@@ -5,6 +5,7 @@ import SupplyEngine from "../components/SupplyEngine";
 import OperatingModel from "../components/OperatingModel";
 import OperatingDiagram from "../components/OperatingDiagram";
 import SectionTransition from "@/components/SectionTransition";
+import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <SectionTransition />
       <OperatingModel />
       <OperatingDiagram />
+      <ContactSection />
       <div className="h-[50vh]" />
     </>
   );
