@@ -23,7 +23,8 @@ export default function FeaturedSystem({
   onCtaClick,
 }: FeaturedSystemProps) {
   return (
-    <section className="relative z-10 py-20 md:py-24 px-6 md:px-8">
+    // <section className="relative z-10 py-20 md:py-24 px-6 md:px-8">
+    <section className="relative z-10 pt-14 pb-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-16">
@@ -43,14 +44,10 @@ export default function FeaturedSystem({
         {/* Mini Diagram */}
         <div
           className="
-    bg-zinc-900/60
-    border border-white/5
-    rounded-2xl
-    px-6 py-10
-    md:px-16 md:py-12
-    backdrop-blur-sm
-    transition-all duration-300
-    mb-16
+            card-surface
+            px-6 py-10
+            md:px-16 md:py-12
+            mb-16
   "
         >
           <div
@@ -142,10 +139,7 @@ export default function FeaturedSystem({
         {/* Pillars Grid */}
         <div className="grid md:grid-cols-2 gap-8">
           {pillars.map((pillar) => (
-            <div
-              key={pillar.title}
-              className="bg-zinc-900/60 border border-white/5 rounded-2xl p-6 backdrop-blur-sm hover:border-white/10 transition-all duration-300"
-            >
+            <div key={pillar.title} className="card-surface p-6">
               <h3 className="text-lg text-white font-medium">{pillar.title}</h3>
 
               <p className="text-sm text-zinc-400 mt-4 leading-relaxed">

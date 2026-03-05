@@ -115,10 +115,24 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    }
+*, ::before, ::after {
+  border-color: var(--border);
+}
   body {
     @apply bg-background text-foreground;
     }
+}
+@layer utilities {
+  .card-surface {
+    background: rgba(24, 24, 27, 0.6); /* zinc-900/60 */
+    border: 0.5px solid rgba(255,255,255,0.03);
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s ease;
+  }
+
+.card-surface:hover,
+.card-surface:has(*:hover) {
+  border-color: rgba(255,255,255,0.18);
+}
 }

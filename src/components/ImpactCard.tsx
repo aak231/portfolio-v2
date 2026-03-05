@@ -12,7 +12,7 @@ export default function ImpactCard({
   contributions,
 }: ImpactCardProps) {
   return (
-    <div className="bg-zinc-900/60 border border-white/5 rounded-2xl p-6 backdrop-blur-sm hover:border-white/10 transition-all duration-300">
+    <div className="card-surface p-6">
       <div className="text-3xl font-semibold text-white">{metric}</div>
 
       <div className="text-lg text-zinc-300 mt-2">{title}</div>

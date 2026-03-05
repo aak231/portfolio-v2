@@ -1,6 +1,7 @@
 export default function OperatingModel() {
   return (
-    <section className="relative z-10 py-32 md:py-20 px-6 md:px-8">
+    // <section className="relative z-10 py-32 md:py-20 px-6 md:px-8">
+    <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16">
           <span className="text-xs tracking-widest uppercase text-zinc-500">
@@ -41,16 +42,7 @@ export default function OperatingModel() {
               ],
             },
           ].map((item) => (
-            <div
-              key={item.title}
-              className="
-            bg-zinc-900/40
-            backdrop-blur-md
-            border border-white/5
-            rounded-2xl
-            p-7
-        "
-            >
+            <div key={item.title} className="card-surface p-6">
               <h3 className="text-white text-lg font-medium mb-5">
                 {item.title}
               </h3>

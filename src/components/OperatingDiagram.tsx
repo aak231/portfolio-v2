@@ -9,8 +9,9 @@ export default function OperatingDiagram() {
 
   return (
     <section className="relative z-10 py-16 md:py-20">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-20">
+      {/* <div className="max-w-6xl mx-auto px-6"> */}
+      <div className="max-w-6xl mx-auto px-6 md:px-8">
+        <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-semibold text-white">
             Decision Loop
           </h2>
@@ -21,14 +22,16 @@ export default function OperatingDiagram() {
         </div>
         <div
           className="
-            bg-zinc-900/60
-            border border-white/5
-            rounded-2xl
-            px-6 py-10
-            md:px-16 md:py-12
-            backdrop-blur-sm
-            transition-all duration-300
-        "
+                group
+                bg-zinc-900/60
+                border border-white/5
+                rounded-2xl
+                backdrop-blur-sm
+                transition-all duration-300
+                py-8 md:py-10
+                px-8 md:px-10
+                hover:border-white/50
+              "
         >
           <div
             className="
@@ -74,10 +77,10 @@ export default function OperatingDiagram() {
                 {i !== steps.length - 1 && (
                   <>
                     {/* Desktop connector */}
-                    <div className="hidden md:block w-10 h-px bg-white/10 mx-3" />
+                    <div className="hidden md:block w-10 h-px bg-white/20 mx-3" />
 
                     {/* Mobile connector */}
-                    <div className="md:hidden h-6 w-px bg-white/10 mt-4" />
+                    <div className="md:hidden h-6 w-px bg-white/20 mt-4" />
                   </>
                 )}
               </div>

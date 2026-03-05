@@ -13,7 +13,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative z-10 py-24 px-6 md:px-8">
+    <section className="relative z-10 py-20 px-6 md:px-8">
       <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-semibold text-white">
           Let’s Build Systems That Compound
@@ -34,6 +34,7 @@ export default function ContactSection() {
               rounded-2xl
               px-6 py-4
               flex items-center justify-between
+              gap-3
               min-w-[280px]
               transition-all duration-300
               hover:border-amber-400/40
@@ -93,6 +94,7 @@ export default function ContactSection() {
               rounded-2xl
               px-6 py-4
               flex items-center justify-between
+              gap-3
               min-w-[280px]
               transition-all duration-300
               hover:border-amber-400/40

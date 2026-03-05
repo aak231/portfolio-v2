@@ -6,7 +6,8 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative z-10 min-h-[85vh] flex items-start pt-[12vh] pb-12 md:pb-16 px-6 md:px-8">
+    // <section className="relative z-10 min-h-[85vh] flex items-start pt-[12vh] pb-12 md:pb-16 px-6 md:px-8">
+    <section className="relative z-10 pt-28 pb-16 md:pt-32 md:pb-20 px-6">
       <div className="w-full max-w-6xl mx-auto flex justify-center">
         <GlassSurface className="max-w-5xl p-10 md:p-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
