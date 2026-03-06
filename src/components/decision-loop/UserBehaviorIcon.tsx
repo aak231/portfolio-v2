@@ -1,11 +1,17 @@
 interface Props {
   delay?: string;
+  active?: boolean;
 }
 
-export default function UserBehaviorIcon({ delay = "0s" }: Props) {
+export default function UserBehaviorIcon({
+  delay = "0s",
+  active = false,
+}: Props) {
   return (
     <div
-      className="flex flex-col items-center gap-3 node-animate"
+      className={`flex flex-col items-center gap-3 ${
+        active ? "node-animate" : "opacity-0"
+      }`}
       style={{ animationDelay: delay }}
     >
       <svg width="46" height="46" viewBox="0 0 46 46">
