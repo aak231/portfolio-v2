@@ -1,90 +1,70 @@
-export default function OperatingDiagram() {
-  const steps = [
-    "User Behavior",
-    "Tracking",
-    "Insights",
-    "Decision",
-    "Optimization",
-  ];
+import UserBehaviorIcon from "./decision-loop/UserBehaviorIcon";
+import TrackingIcon from "./decision-loop/TrackingIcon";
+import InsightsIcon from "./decision-loop/InsightsIcon";
+import DecisionIcon from "./decision-loop/DecisionIcon";
+import OptimizationIcon from "./decision-loop/OptimizationIcon";
 
+export default function OperatingDiagram() {
   return (
-    <section className="relative z-10 py-16 md:py-20">
-      {/* <div className="max-w-6xl mx-auto px-6"> */}
-      <div className="max-w-6xl mx-auto px-6 md:px-8">
+    <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-semibold text-white">
             Decision Loop
           </h2>
+
           <p className="text-zinc-500 mt-4 max-w-2xl">
             Product growth is a continuous feedback loop from behavior to
             insight to optimized execution.
           </p>
         </div>
+
+        {/* System Diagram */}
         <div
           className="
-                group
-                bg-zinc-900/60
-                border border-white/5
-                rounded-2xl
-                backdrop-blur-sm
-                transition-all duration-300
-                py-8 md:py-10
-                px-8 md:px-10
-                hover:border-white/50
-              "
+            relative
+            bg-zinc-900/60
+            border border-white/5
+            rounded-2xl
+            backdrop-blur-sm
+            transition-all duration-300
+            py-14
+            px-10
+            hover:border-white/50
+          "
         >
-          <div
-            className="
-              flex
-              flex-col
-              items-center
-              md:flex-row
-              md:justify-center
-              md:items-center
-              gap-6
-              md:gap-2
-              w-full
-            "
-          >
-            {steps.map((step, i) => (
-              <div
-                key={step}
-                className="
-                  flex
-                  flex-col
-                  items-center
-                  md:flex-row
-                "
-              >
-                <div
-                  className="
-                    px-6 py-2.5
-                    bg-zinc-800
-                    rounded-full
-                    border border-white/10
-                    whitespace-nowrap
-                    flex items-center gap-2
-                  "
-                >
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      i === 0 ? "bg-amber-400" : "bg-amber-400/70"
-                    }`}
-                  />
-                  {step}
-                </div>
+          {/* Connection lines */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/2 left-1/4 w-1/4 h-px bg-white/10" />
+            <div className="absolute top-1/2 right-1/4 w-1/4 h-px bg-white/10" />
 
-                {i !== steps.length - 1 && (
-                  <>
-                    {/* Desktop connector */}
-                    <div className="hidden md:block w-10 h-px bg-white/20 mx-3" />
+            <div className="absolute left-1/2 top-1/4 h-1/4 w-px bg-white/10" />
+            <div className="absolute left-1/2 bottom-1/4 h-1/4 w-px bg-white/10" />
+          </div>
 
-                    {/* Mobile connector */}
-                    <div className="md:hidden h-6 w-px bg-white/20 mt-4" />
-                  </>
-                )}
-              </div>
-            ))}
+          {/* Grid Layout */}
+          <div className="grid grid-cols-3 grid-rows-3 gap-y-14 gap-x-8 place-items-center">
+            {/* Insights */}
+            <div className="col-start-1 row-start-2">
+              <UserBehaviorIcon delay="0s" />
+            </div>
+
+            <div className="col-start-2 row-start-2">
+              <TrackingIcon delay="0.35s" />
+            </div>
+
+            <div className="col-start-2 row-start-1">
+              <InsightsIcon delay="0.7s" />
+            </div>
+
+            <div className="col-start-3 row-start-2">
+              <DecisionIcon delay="1.05s" />
+            </div>
+
+            <div className="col-start-2 row-start-3">
+              <OptimizationIcon delay="1.4s" />
+            </div>
           </div>
         </div>
       </div>

@@ -1,12 +1,10 @@
 export default function OperatingModel() {
   return (
     // <section className="relative z-10 py-32 md:py-20 px-6 md:px-8">
-    <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative z-10 py-16 md:py-20">
+      <div className="max-w-6xl mx-auto px-6 md:px-8">
         <div className="mb-16">
-          <span className="text-xs tracking-widest uppercase text-zinc-500">
-            Framework
-          </span>
+          <span className="section-label">Framework</span>
           <h2 className="text-4xl md:text-4xl font-semibold text-white">
             Operating Principles
           </h2>

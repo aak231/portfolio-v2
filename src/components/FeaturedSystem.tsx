@@ -28,9 +28,7 @@ export default function FeaturedSystem({
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-16">
-          <div className="text-xs tracking-widest uppercase text-zinc-500 mb-4">
-            {label}
-          </div>
+          <div className="section-label">{label}</div>
 
           <h2 className="text-3xl md:text-4xl font-semibold text-white">
             {title}
@@ -76,7 +74,7 @@ export default function FeaturedSystem({
                 {/* Step Pill */}
                 <div
                   className="
-            px-6 py-2.5
+            px-4 py-2 md:px-6 md:py-2.5
             bg-zinc-800
             rounded-full
             border border-white/10

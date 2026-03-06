@@ -8,10 +8,10 @@ export default function Projects() {
 
   return (
     // <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
-      <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8"> 
+    <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <span className="text-xs tracking-widest uppercase text-zinc-500">
+        <span className="section-label">
           Milestones
         </span>
         <div className="flex justify-between items-center mb-12">
