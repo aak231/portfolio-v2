@@ -6,12 +6,18 @@ interface Props {
 export default function InsightsIcon({ delay = "0s", active = false }: Props) {
   return (
     <div
-      className={`flex flex-col items-center gap-3 ${
+      className={`flex flex-col items-center gap-2 ${
         active ? "node-animate" : "opacity-0"
       }`}
       style={{ animationDelay: delay }}
     >
-      <svg width="46" height="46" viewBox="0 0 46 46">
+      <svg
+        width="40"
+        height="40"
+        viewBox="6 6 34 34"
+        className="block"
+        aria-hidden="true"
+      >
         {/* Axes */}
         <line
           x1="12"
@@ -55,7 +61,7 @@ export default function InsightsIcon({ delay = "0s", active = false }: Props) {
         <rect x="32" y="10" width="4" height="22" fill="#fbbf24" />
       </svg>
 
-      <span className="text-sm text-zinc-300">Insights</span>
+      <span className="text-sm text-zinc-300 text-center">Insights</span>
     </div>
   );
 }

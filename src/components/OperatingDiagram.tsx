@@ -68,11 +68,11 @@ export default function OperatingDiagram() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 py-16 md:py-20 px-6 md:px-8"
+      className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8"
     >
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-12">
           <h2 className="text-3xl md:text-4xl font-semibold text-white">
             Decision Loop
           </h2>
@@ -133,28 +133,29 @@ export default function OperatingDiagram() {
                 })}
             </svg>
 
-            {/* USER BEHAVIOR */}
-            <div className="absolute left-[22%] top-1/2 -translate-y-1/2">
+            {/* Icons aligned to ellipse: centered on radials, same spacing from chart */}
+            {/* USER BEHAVIOR – left radial */}
+            <div className="absolute left-[26%] top-1/2 -translate-x-1/2 -translate-y-1/2">
               <UserBehaviorIcon delay="0s" active={isInView} />
             </div>
 
-            {/* TRACKING */}
-            <div className="absolute left-1/2 top-[8%] -translate-x-1/2">
+            {/* TRACKING – top radial */}
+            <div className="absolute left-1/2 top-[18%] -translate-x-1/2 -translate-y-1/2">
               <TrackingIcon delay="0.4s" active={isInView} />
             </div>
 
-            {/* INSIGHTS */}
-            <div className="absolute right-[22%] top-1/2 -translate-y-1/2">
+            {/* INSIGHTS – right radial */}
+            <div className="absolute left-[74%] top-1/2 -translate-x-1/2 -translate-y-1/2">
               <InsightsIcon delay="0.8s" active={isInView} />
             </div>
 
-            {/* DECISION */}
-            <div className="absolute left-[64%] bottom-[8%] -translate-x-1/2">
+            {/* DECISION – bottom-right radial */}
+            <div className="absolute left-[70%] top-[82%] -translate-x-1/2 -translate-y-1/2">
               <DecisionIcon delay="1.2s" active={isInView} />
             </div>
 
-            {/* OPTIMIZATION */}
-            <div className="absolute left-[36%] bottom-[8%] -translate-x-1/2">
+            {/* OPTIMIZATION – bottom-left radial */}
+            <div className="absolute left-[30%] top-[82%] -translate-x-1/2 -translate-y-1/2">
               <OptimizationIcon delay="1.6s" active={isInView} />
             </div>
           </div>

@@ -14,7 +14,7 @@ export default function UserBehaviorIcon({
       }`}
       style={{ animationDelay: delay }}
     >
-      <svg width="46" height="46" viewBox="0 0 46 46">
+      <svg width="40" height="40" viewBox="0 0 46 46">
         <circle cx="23" cy="23" r="4" fill="#fbbf24" />
         <circle
           cx="23"
@@ -32,6 +32,19 @@ export default function UserBehaviorIcon({
           strokeWidth="1"
           fill="none"
         />
+        {/* Lowkey ripple – half frequency (double duration) */}
+        {active && (
+          <>
+            <circle cx="23" cy="23" r="10" fill="none" stroke="#fbbf24" strokeWidth="1.2">
+              <animate attributeName="r" values="10;18;10" dur="4.4s" repeatCount="indefinite" />
+              <animate attributeName="stroke-opacity" values="0.5;0;0.5" dur="4.4s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="23" cy="23" r="10" fill="none" stroke="#fbbf24" strokeWidth="1.2">
+              <animate attributeName="r" values="10;18;10" dur="4.4s" repeatCount="indefinite" begin="2.2s" />
+              <animate attributeName="stroke-opacity" values="0.5;0;0.5" dur="4.4s" repeatCount="indefinite" begin="2.2s" />
+            </circle>
+          </>
+        )}
       </svg>
 
       <span className="text-sm text-zinc-300">User Behavior</span>

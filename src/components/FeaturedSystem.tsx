@@ -24,10 +24,10 @@ export default function FeaturedSystem({
 }: FeaturedSystemProps) {
   return (
     // <section className="relative z-10 py-20 md:py-24 px-6 md:px-8">
-    <section className="relative z-10 pt-14 pb-20 px-6 md:px-8">
+    <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-12">
           <div className="section-label">{label}</div>
 
           <h2 className="text-3xl md:text-4xl font-semibold text-white">

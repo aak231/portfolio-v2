@@ -13,7 +13,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="relative z-10 py-20 px-6 md:px-8">
+    <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
       <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-semibold text-white">
           Let’s Build Systems That Compound
