@@ -21,13 +21,14 @@ export default function ImpactCard({
         {description}
       </p>
 
-      <div className="mt-6 space-y-2">
+      <ul className="mt-6 space-y-2">
         {contributions.map((item, index) => (
-          <div key={index} className="text-xs text-zinc-500">
-            • {item}
-          </div>
+          <li key={index} className="flex gap-3 text-xs text-zinc-500">
+            <span className="text-amber-400 shrink-0">•</span>
+            <span>{item}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
