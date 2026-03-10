@@ -5,9 +5,25 @@ import InsightsIcon from "./decision-loop/InsightsIcon";
 import DecisionIcon from "./decision-loop/DecisionIcon";
 import OptimizationIcon from "./decision-loop/OptimizationIcon";
 
+const ELLIPSE = { cx: 260, cy: 170, rx: 165, ry: 95 };
+const NODE_COUNT = 5;
+const LOOP_DURATION_MS = 12000;
+
+function getNodePositionOnEllipse(nodeIndex: number, phase: number) {
+  // phase 0..1; clockwise from right (0°) -> bottom -> left -> top -> right (positive angle = clockwise on screen)
+  const angle = 2 * Math.PI * (nodeIndex / NODE_COUNT + phase);
+  return {
+    x: ELLIPSE.cx + ELLIPSE.rx * Math.cos(angle),
+    y: ELLIPSE.cy + ELLIPSE.ry * Math.sin(angle),
+  };
+}
+
 export default function OperatingDiagram() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isInView, setIsInView] = useState(false);
+  const [phase, setPhase] = useState(0);
+  const rafRef = useRef<number>(0);
+  const startRef = useRef<number>(0);
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -20,15 +36,34 @@ export default function OperatingDiagram() {
           observer.unobserve(element);
         }
       },
-      {
-        threshold: 0.35,
-      }
+      { threshold: 0.35 }
     );
 
     observer.observe(element);
-
     return () => observer.disconnect();
   }, []);
+
+  // When in view, run animation so nodes move along ellipse; positions correct from frame 1
+  useEffect(() => {
+    if (!isInView) return;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    startRef.current = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - startRef.current;
+      const newPhase = (elapsed / LOOP_DURATION_MS) % 1;
+      setPhase(newPhase);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isInView]);
 
   return (
     <section
@@ -82,27 +117,20 @@ export default function OperatingDiagram() {
                 fill="none"
               />
 
-              {/* Five nodes moving *on* the ellipse (animateMotion follows path = no orbit) */}
-              {(() => {
-                const ellipsePath =
-                  "M 425 170 A 165 95 0 0 1 260 265 A 165 95 0 0 1 95 170 A 165 95 0 0 1 260 75 A 165 95 0 0 1 425 170";
-                const delays = ["0s", "2.4s", "4.8s", "7.2s", "9.6s"];
-                return (
-                  isInView &&
-                  delays.map((begin, i) => (
-                    <g key={i} className="decision-loop-node-wrap">
-                      <animateMotion
-                        path={ellipsePath}
-                        dur="12s"
-                        repeatCount="indefinite"
-                        rotate="0"
-                        begin={begin}
-                      />
-                      <circle cx="0" cy="0" r="5" className="decision-loop-node" />
-                    </g>
-                  ))
-                );
-              })()}
+              {/* Five nodes on the ellipse: positions from JS so they're on the path from frame 1 */}
+              {isInView &&
+                Array.from({ length: NODE_COUNT }, (_, i) => {
+                  const { x, y } = getNodePositionOnEllipse(i, phase);
+                  return (
+                    <circle
+                      key={i}
+                      cx={x}
+                      cy={y}
+                      r={5}
+                      className="decision-loop-node"
+                    />
+                  );
+                })}
             </svg>
 
             {/* USER BEHAVIOR */}
