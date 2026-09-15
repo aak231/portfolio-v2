@@ -41,27 +41,6 @@ export default function GlassSurface({
     opacity-40
   "
       />
-      {/* top light reflection */}
-      {/* <div
-        className="
-          pointer-events-none
-          absolute inset-0 rounded-3xl
-          bg-gradient-to-br
-          from-white/40
-          via-white/10
-          to-transparent
-          opacity-30
-        "
-      /> */}
-      <div
-        className="
-    pointer-events-none
-    absolute inset-0 rounded-3xl
-    opacity-[0.02]
-    mix-blend-overlay
-    bg-[url('/noise.png')]
-  "
-      />
       {/* subtle bottom dark depth */}
       <div
         className="

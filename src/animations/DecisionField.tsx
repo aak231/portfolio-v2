@@ -9,15 +9,19 @@ type Node = {
   baseY: number;
 };
 
-const isMobile = window.innerWidth < 768;
-const MAX_NODES = isMobile ? 120 : 300;
+const NODE_POOL_SIZE = 300;
 
 export default function DecisionField() {
+  const initialIsMobile = window.innerWidth < 768;
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const nodesRef = useRef<Node[]>([]);
-  const activeCountRef = useRef<number>(window.innerWidth < 768 ? 60 : 100);
+  const isMobileRef = useRef<boolean>(initialIsMobile);
+  const maxNodesRef = useRef<number>(initialIsMobile ? 120 : 300);
+  const activeCountRef = useRef<number>(initialIsMobile ? 60 : 100);
   const fpsRef = useRef<number[]>([]);
   const lastTimeRef = useRef<number>(0);
+  const rafIdRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,6 +32,15 @@ export default function DecisionField() {
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+
+      const wasMobile = isMobileRef.current;
+      const isMobile = window.innerWidth < 768;
+      isMobileRef.current = isMobile;
+
+      if (isMobile !== wasMobile) {
+        maxNodesRef.current = isMobile ? 120 : 300;
+        activeCountRef.current = isMobile ? 60 : 100;
+      }
     };
 
     resize();
@@ -35,7 +48,7 @@ export default function DecisionField() {
 
     if (nodesRef.current.length === 0) {
       const nodes: Node[] = [];
-      for (let i = 0; i < MAX_NODES; i++) {
+      for (let i = 0; i < NODE_POOL_SIZE; i++) {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
         nodes.push({
@@ -52,12 +65,14 @@ export default function DecisionField() {
 
     const mouse = { x: 0, y: 0, px: 0, py: 0 };
 
-    window.addEventListener("mousemove", (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       mouse.px = mouse.x;
       mouse.py = mouse.y;
       mouse.x = e.clientX;
       mouse.y = e.clientY;
-    });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
 
     let t = 0;
     let scrollProgress = 0;
@@ -77,8 +92,11 @@ export default function DecisionField() {
 
     updateScroll();
     window.addEventListener("scroll", updateScroll);
+
     const loop = (time: number) => {
       if (!ctx) return;
+
+      const isMobile = isMobileRef.current;
 
       const gradient = ctx.createRadialGradient(
         canvas.width / 2,
@@ -114,7 +132,7 @@ export default function DecisionField() {
 
       if (avgFps < 50 && activeCountRef.current > 60) {
         activeCountRef.current -= 5;
-      } else if (avgFps > 58 && activeCountRef.current < MAX_NODES) {
+      } else if (avgFps > 58 && activeCountRef.current < maxNodesRef.current) {
         activeCountRef.current += 2;
       }
       // ------------------------------------------------
@@ -214,13 +232,16 @@ export default function DecisionField() {
         }
       }
 
-      requestAnimationFrame(loop);
-    };;
+      rafIdRef.current = requestAnimationFrame(loop);
+    };
 
-    requestAnimationFrame(loop);
+    rafIdRef.current = requestAnimationFrame(loop);
 
     return () => {
+      cancelAnimationFrame(rafIdRef.current);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", updateScroll);
     };
   }, []);
 

@@ -6,7 +6,6 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    // <section className="relative z-10 min-h-[85vh] flex items-start pt-[12vh] pb-12 md:pb-16 px-6 md:px-8">
     <section className="relative z-10 pt-28 pb-16 md:pt-32 md:pb-20 px-6 md:px-8">
       <div className="w-full max-w-6xl mx-auto flex justify-center">
         <GlassSurface className="max-w-5xl p-10 md:p-16">
@@ -27,7 +26,9 @@ export default function Hero() {
               </p>
 
               <button
-                onClick={() => navigate("/systems-in-practice")}
+                onClick={() =>
+                  navigate("/systems-in-practice", { viewTransition: true })
+                }
                 className="
                   border border-amber-400/70 
                   text-amber-400 

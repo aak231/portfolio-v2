@@ -23,7 +23,6 @@ export default function FeaturedSystem({
   onCtaClick,
 }: FeaturedSystemProps) {
   return (
-    // <section className="relative z-10 py-20 md:py-24 px-6 md:px-8">
     <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}

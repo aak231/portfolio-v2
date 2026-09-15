@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 
 export default function Nav() {
   return (
-    <div className="fixed top-0 left-0 w-full z-50">
-      <div className="max-w-6xl mx-auto px-6 md:px-8 py-6 flex justify-between items-center text-sm">
-        <NavLink to="/" className="group">
+    <div className="fixed top-4 left-0 w-full z-50 px-6 md:px-8">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 py-3 flex justify-between items-center text-sm bg-zinc-900/60 backdrop-blur-md border border-white/10 rounded-full">
+        <NavLink to="/" viewTransition className="group">
           <div
             className="
               w-10 h-10
@@ -29,6 +29,7 @@ export default function Nav() {
         <div className="flex gap-8 text-zinc-500">
           <NavLink
             to="/systems-in-practice"
+            viewTransition
             className={({ isActive }) =>
               isActive ? "text-white" : "hover:text-white transition-colors"
             }

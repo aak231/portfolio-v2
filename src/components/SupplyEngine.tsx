@@ -35,7 +35,9 @@ export default function SupplyEngine() {
         },
       ]}
       ctaText="Explore Full Architecture"
-      onCtaClick={() => navigate("/systems-in-practice/seller-leads")}
+      onCtaClick={() =>
+        navigate("/systems-in-practice/seller-leads", { viewTransition: true })
+      }
     />
   );
 }

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Systems() {
   return (
     <div className="relative z-10 py-32 px-6 md:px-8">
@@ -24,12 +26,13 @@ export default function Systems() {
               dubizzle.
             </p>
 
-            <a
-              href="/systems-in-practice/seller-leads"
+            <Link
+              to="/systems-in-practice/seller-leads"
+              viewTransition
               className="text-xs uppercase tracking-widest text-zinc-500 hover:text-white"
             >
               Explore →
-            </a>
+            </Link>
           </div>
         </div>
       </div>

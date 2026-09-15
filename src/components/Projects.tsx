@@ -7,7 +7,6 @@ export default function Projects() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    // <section className="relative z-10 py-16 md:py-20 px-6 md:px-8">
     <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
