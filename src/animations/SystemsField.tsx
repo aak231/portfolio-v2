@@ -13,8 +13,8 @@ type Orb = {
   lifespan: number;
 };
 
-const MIN_COUNT = 6;
-const MAX_COUNT = 10;
+const MIN_COUNT = 4;
+const MAX_COUNT = 7;
 
 function randomBetween(min: number, max: number) {
   return min + Math.random() * (max - min);
@@ -63,7 +63,7 @@ export default function SystemsField() {
     ).matches;
 
     const getRadiusRange = (): [number, number] =>
-      isMobileRef.current ? [40, 160] : [60, 260];
+      isMobileRef.current ? [30, 90] : [50, 150];
     const getMaxSpeed = () => (isMobileRef.current ? 0.15 : 0.25);
 
     const resize = () => {
@@ -78,11 +78,17 @@ export default function SystemsField() {
       const [minR, maxR] = getRadiusRange();
       const radius = randomBetween(minR, maxR);
       const maxSpeed = getMaxSpeed();
+      // Pick direction + magnitude separately (not independent vx/vy) so every
+      // orb gets a guaranteed minimum speed — randomizing vx/vy independently
+      // could land near (0,0), leaving an orb visibly frozen until a collision
+      // impulse kicked it into motion.
+      const angle = Math.random() * Math.PI * 2;
+      const speed = randomBetween(maxSpeed * 0.5, maxSpeed);
       return {
         x: randomBetween(radius, Math.max(radius, canvas.width - radius)),
         y: randomBetween(radius, Math.max(radius, canvas.height - radius)),
-        vx: (Math.random() - 0.5) * maxSpeed * 2,
-        vy: (Math.random() - 0.5) * maxSpeed * 2,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
         radius,
         glow: 0,
         fade: spawning ? 0 : 1,

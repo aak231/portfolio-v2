@@ -100,9 +100,7 @@ export default function OperatingDiagram() {
           <div className="relative h-[420px] w-full">
             {/* LOOP RING */}
             <svg
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-              width="520"
-              height="320"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none w-full max-w-[520px] h-auto"
               viewBox="0 0 520 320"
               aria-hidden="true"
             >

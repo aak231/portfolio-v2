@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <section className="relative z-10 pt-28 pb-16 md:pt-32 md:pb-20 px-6 md:px-8">
       <div className="w-full max-w-6xl mx-auto flex justify-center">
-        <GlassSurface className="max-w-5xl p-10 md:p-16">
+        <GlassSurface className="w-full max-w-5xl p-10 md:p-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
               <h1 className="text-7xl font-bold text-white tracking-tight">
