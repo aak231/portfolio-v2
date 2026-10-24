@@ -108,10 +108,16 @@ export default function SystemsField() {
     }
 
     if (prefersReducedMotion) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const orb of orbsRef.current) drawOrb(ctx, orb);
+      // Setting canvas.width in resize() clears the canvas, so redraw after it.
+      const drawStatic = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const orb of orbsRef.current) drawOrb(ctx, orb);
+      };
+      drawStatic();
+      window.addEventListener("resize", drawStatic);
       return () => {
         window.removeEventListener("resize", resize);
+        window.removeEventListener("resize", drawStatic);
       };
     }
 

@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import SystemsField from "../animations/SystemsField";
+import BrandLogo from "@/components/BrandLogo";
+import { Pill } from "@/components/CaseStudy";
+import { CASE_STUDIES } from "@/data/caseStudies";
 
 export default function Systems() {
   return (
@@ -13,30 +16,41 @@ export default function Systems() {
             </h1>
 
             <p className="text-zinc-400 max-w-2xl">
-              Deep architectural breakdowns of marketplace systems,
-              monetization engines and operational frameworks.
+              Deep architectural breakdowns of marketplace systems, monetization
+              engines and operational frameworks.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-10">
-            <div className="bg-zinc-900/60 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:border-white/10 transition-all">
-              <h3 className="text-xl text-white mb-3">
-                Seller Leads Marketplace
-              </h3>
-
-              <p className="text-zinc-400 text-sm mb-6">
-                Designing a structured seller supply engine across Bayut and
-                dubizzle.
-              </p>
-
-              <Link
-                to="/systems-in-practice/seller-leads"
-                viewTransition
-                className="text-xs uppercase tracking-widest text-zinc-500 hover:text-white"
+            {CASE_STUDIES.map((study) => (
+              <div
+                key={study.id}
+                className="card-surface relative flex flex-col p-8"
               >
-                Explore →
-              </Link>
-            </div>
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <h2 className="text-xl font-medium text-white">
+                    {study.title}
+                  </h2>
+                  <BrandLogo brand={study.brand} className="-my-1" />
+                </div>
+
+                <p className="mb-6 text-sm text-zinc-400">
+                  {study.description}
+                </p>
+
+                <div className="mt-auto flex flex-col items-start gap-4">
+                  <Pill size="md">{study.tag}</Pill>
+                  <Link
+                    to={study.to}
+                    viewTransition
+                    aria-label={`Explore ${study.title}`}
+                    className="text-xs uppercase tracking-widest text-zinc-500 transition-colors hover:text-white after:absolute after:inset-0 after:content-['']"
+                  >
+                    Explore <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

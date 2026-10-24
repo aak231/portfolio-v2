@@ -1,4 +1,12 @@
-import { Link } from "react-router-dom";
+import {
+  CaseSection,
+  CaseStudyPage,
+  DetailCards,
+  DiagramCard,
+  OutcomeCard,
+  Prose,
+  SectionTitle,
+} from "@/components/CaseStudy";
 
 const STEPS = [
   "Intent Capture",
@@ -27,146 +35,175 @@ const PILLARS = [
   },
 ];
 
+function StepFlow() {
+  return (
+    <ol
+      role="list"
+      className="flex w-full flex-col items-center gap-6 xl:flex-row xl:justify-center xl:gap-2"
+    >
+      {STEPS.map((step, i) => (
+        <li key={step} className="flex flex-col items-center xl:flex-row">
+          <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-zinc-800 px-4 py-2 xl:px-6 xl:py-2.5">
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${
+                i === 0 ? "bg-amber-400" : "bg-amber-400/70"
+              }`}
+            />
+            {step}
+          </div>
+
+          {i !== STEPS.length - 1 && (
+            <>
+              <div
+                aria-hidden="true"
+                className="mx-2 hidden items-center xl:flex"
+              >
+                <div className="h-px w-8 bg-gradient-to-r from-white/10 to-amber-400/20" />
+                <svg
+                  className="h-3 w-3 text-amber-400/70"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 12h14M13 6l6 6-6 6"
+                  />
+                </svg>
+              </div>
+
+              <div
+                aria-hidden="true"
+                className="mt-4 flex flex-col items-center xl:hidden"
+              >
+                <div className="h-6 w-px bg-gradient-to-b from-white/10 to-amber-400/20" />
+                <svg
+                  className="mt-1 h-3 w-3 text-amber-400/70"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 5v14M6 13l6 6 6-6"
+                  />
+                </svg>
+              </div>
+            </>
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export default function SellerLeads() {
   return (
-    <div className="relative z-10 pt-28 pb-24 md:pt-32 px-6 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        <Link
-          to="/systems-in-practice"
-          viewTransition
-          className="text-xs uppercase tracking-widest text-zinc-500 hover:text-white transition-colors"
-        >
-          ← Back to Systems in Practice
-        </Link>
+    <CaseStudyPage
+      id="seller-leads"
+      title="Designing the Seller Leads Marketplace"
+      subtitle="How a single validation experiment turned a “someday” idea into a structured seller acquisition system across Bayut and dubizzle."
+    >
+      <CaseSection title="The Problem">
+        <Prose>
+          Management had a general sense that a dedicated seller acquisition
+          flow was something we’d eventually need to build, but it wasn’t
+          validated or prioritized. Every inbound WhatsApp conversation with an
+          agent looked identical from a data standpoint — there was no way to
+          tell whether the person reaching out wanted to sell, buy, or invest.
+          Seller intent was almost certainly buried in that traffic, but it was
+          invisible.
+        </Prose>
+      </CaseSection>
 
-        <div className="mt-8 mb-16">
-          <span className="section-label">Case Study · Supply Engine</span>
-          <h1 className="text-4xl md:text-5xl font-semibold text-white">
-            Designing the Seller Leads Marketplace
-          </h1>
-          <p className="text-zinc-400 mt-4 max-w-2xl leading-relaxed">
-            How a single validation experiment turned a "someday" idea into a
-            structured seller acquisition system across Bayut and dubizzle.
-          </p>
-        </div>
+      <CaseSection title="The Hypothesis">
+        <Prose>
+          The underlying assumption was that seller intent already existed
+          within the platform’s inbound demand, but we had no reliable way to
+          identify or quantify it. If we could capture that intent at the point
+          of interaction, we could determine whether seller demand was large and
+          consistent enough to justify building a dedicated acquisition system.
+          The goal was not to build the full product immediately. It was to
+          reduce the uncertainty first.
+        </Prose>
+      </CaseSection>
 
-        <section className="card-surface p-8 mb-8">
-          <h2 className="text-xl text-white font-medium mb-4">The Problem</h2>
-          <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
-            Management had a general sense that a dedicated seller
-            acquisition flow was something we'd eventually need to build, but
-            it wasn't validated or prioritized. Every inbound WhatsApp
-            conversation with an agent looked identical from a data
-            standpoint — there was no way to tell whether the person
-            reaching out wanted to sell, buy, or invest. Seller intent was
-            almost certainly buried in that traffic, but it was invisible.
-          </p>
-        </section>
+      <CaseSection title="The Experiment: Intent Capture">
+        <Prose>
+          Rather than committing to a full seller product before knowing if the
+          demand was real, we ran a lightweight experiment called{" "}
+          <span className="text-white">Intent Capture</span>: an additional
+          field added to every WhatsApp lead generated by agents on the
+          platform, simply asking why the user was reaching out — to sell/lease,
+          buy, or invest.
+        </Prose>
+        <Prose>
+          The majority of respondents selected sell/lease. That result was the
+          signal the business needed — it confirmed seller intent was large
+          enough and consistent enough to justify a dedicated acquisition
+          system, and it’s what accelerated the Seller Leads program from a
+          future idea into an active build.
+        </Prose>
+      </CaseSection>
 
-        <section className="card-surface p-8 mb-8">
-          <h2 className="text-xl text-white font-medium mb-4">
-            The Experiment: Intent Capture
-          </h2>
-          <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
-            Rather than committing to a full seller product before knowing if
-            the demand was real, we ran a lightweight experiment called{" "}
-            <span className="text-white">Intent Capture</span>: an additional
-            field added to every WhatsApp lead generated by agents on the
-            platform, simply asking why the user was reaching out — to
-            sell/lease, buy, or invest.
-          </p>
-          <p className="text-sm md:text-base text-zinc-400 leading-relaxed mt-4">
-            The majority of respondents selected sell/lease. That result was
-            the signal the business needed — it confirmed seller intent was
-            large enough and consistent enough to justify a dedicated
-            acquisition system, and it's what accelerated the Seller Leads
-            program from a future idea into an active build.
-          </p>
-        </section>
+      <CaseSection title="The Decision">
+        <Prose>
+          Rather than committing to a dedicated seller acquisition journey
+          upfront, we chose to validate the underlying demand through an
+          existing, high volume channel.
+        </Prose>
+        <Prose>
+          The Intent Capture experiment required a small change to an existing
+          WhatsApp lead flow, allowing us to observe seller intent without
+          introducing a new acquisition journey or significant operational
+          complexity.
+        </Prose>
+        <Prose>
+          The result gave the team enough evidence to move from asking whether
+          seller demand existed to designing how that demand could become a
+          structured marketplace supply system.
+        </Prose>
+      </CaseSection>
 
-        <section className="mb-8">
-          <h2 className="text-xl text-white font-medium mb-6">The System</h2>
+      <section className="mb-8">
+        <SectionTitle>The System</SectionTitle>
+        <DiagramCard>
+          <StepFlow />
+        </DiagramCard>
+        <DetailCards cards={PILLARS} />
+      </section>
 
-          <div className="card-surface px-6 py-10 md:px-16 md:py-12 mb-8">
-            <div className="flex flex-col items-center md:flex-row md:justify-center md:items-center gap-6 md:gap-2 w-full">
-              {STEPS.map((step, i) => (
-                <div key={step} className="flex flex-col items-center md:flex-row">
-                  <div className="px-4 py-2 md:px-6 md:py-2.5 bg-zinc-800 rounded-full border border-white/10 whitespace-nowrap flex items-center gap-2">
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        i === 0 ? "bg-amber-400" : "bg-amber-400/70"
-                      }`}
-                    />
-                    {step}
-                  </div>
+      <CaseSection title="How the System Behaves">
+        <Prose>
+          The system was designed as a progression rather than a single feature.
+        </Prose>
+        <Prose>
+          Intent Capture identified potential seller demand. Qualification
+          converted that signal into usable supply. The marketplace then
+          distributed qualified leads to brokers, while the unlock model
+          controlled access and created a mechanism for monetization.
+        </Prose>
+        <Prose>
+          As more qualified supply entered the system, marketplace liquidity
+          increased. This created a feedback loop between seller demand,
+          available inventory and broker participation.
+        </Prose>
+        <Prose>
+          The important shift was from capturing an isolated signal to building
+          a system that could continuously convert that signal into marketplace
+          supply.
+        </Prose>
+      </CaseSection>
 
-                  {i !== STEPS.length - 1 && (
-                    <>
-                      <div className="hidden md:flex items-center mx-3">
-                        <div className="w-8 h-px bg-gradient-to-r from-white/10 to-amber-400/20" />
-                        <svg
-                          className="w-3 h-3 text-amber-400/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 12h14M13 6l6 6-6 6"
-                          />
-                        </svg>
-                      </div>
-
-                      <div className="md:hidden flex flex-col items-center mt-4">
-                        <div className="h-6 w-px bg-gradient-to-r from-white/10 to-amber-400/20" />
-                        <svg
-                          className="w-3 h-3 text-amber-400/70 mt-1"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 5v14M6 13l6 6 6-6"
-                          />
-                        </svg>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {PILLARS.map((pillar) => (
-              <div key={pillar.title} className="card-surface p-6">
-                <h3 className="text-lg text-white font-medium">
-                  {pillar.title}
-                </h3>
-                <p className="text-sm text-zinc-400 mt-4 leading-relaxed">
-                  {pillar.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="card-surface p-8">
-          <h2 className="text-xl text-white font-medium mb-4">The Outcome</h2>
-          <div className="text-3xl font-semibold text-white">8K+</div>
-          <p className="text-sm md:text-base text-zinc-400 leading-relaxed mt-2">
-            Seller leads generated in the first four months of the program —
-            validating the Intent Capture hypothesis at scale and turning a
-            single experiment into a structured, ongoing supply engine for
-            the marketplace.
-          </p>
-        </section>
-      </div>
-    </div>
+      <OutcomeCard stat="8K+">
+        Seller leads generated in the first four months of the program. It
+        validated the Intent Capture hypothesis at scale and turned one
+        experiment into an ongoing supply engine for the marketplace.
+      </OutcomeCard>
+    </CaseStudyPage>
   );
 }
