@@ -1,59 +1,60 @@
-import { Link } from "react-router-dom";
-import SystemsField from "../animations/SystemsField";
+import { ListOrdered, Store, Tags } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { Pill } from "@/components/CaseStudy";
-import { CASE_STUDIES } from "@/data/caseStudies";
+import { LinkCard, TextLink } from "@/components/ui/links";
+import { CASE_STUDIES, type CaseStudy } from "@/data/caseStudies";
+
+const ICONS: Record<CaseStudy["icon"], typeof Store> = {
+  store: Store,
+  tags: Tags,
+  list: ListOrdered,
+};
 
 export default function Systems() {
   return (
-    <>
-      <SystemsField />
-      <div className="relative z-10 py-32 px-6 md:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-20">
-            <h1 className="text-4xl font-semibold text-white mb-4">
-              Systems in Practice
-            </h1>
+    <div className="relative z-10 px-6 pb-20 pt-28 md:px-8 md:pt-32">
+      <div className="mx-auto max-w-6xl">
+        <header className="mb-12">
+          <h1 className="mb-4 text-4xl font-semibold text-white md:text-5xl">
+            Systems in Practice
+          </h1>
+          <p className="text-body">
+            Case studies from building marketplaces and AI products at dubizzle
+            Group: what we decided, what we traded off and what happened.
+          </p>
+        </header>
 
-            <p className="text-zinc-400 max-w-2xl">
-              Deep architectural breakdowns of marketplace systems, monetization
-              engines and operational frameworks.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            {CASE_STUDIES.map((study) => (
-              <div
-                key={study.id}
-                className="card-surface relative flex flex-col p-8"
-              >
-                <div className="mb-3 flex items-start justify-between gap-4">
-                  <h2 className="text-xl font-medium text-white">
-                    {study.title}
-                  </h2>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {CASE_STUDIES.map((study) => {
+            const Icon = ICONS[study.icon];
+            return (
+              <LinkCard key={study.id} className="flex flex-col p-6 md:p-7">
+                <div className="mb-5 flex items-start justify-between gap-4">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-gold/40 bg-gold/10 text-gold">
+                    <Icon aria-hidden="true" className="h-5 w-5" />
+                  </span>
                   <BrandLogo brand={study.brand} className="-my-1" />
                 </div>
 
-                <p className="mb-6 text-sm text-zinc-400">
-                  {study.description}
+                <Pill className="self-start">{study.tag}</Pill>
+                <h2 className="mt-4 text-xl font-medium text-white">
+                  {study.title}
+                </h2>
+                <p className="mt-3 text-body">{study.summary}</p>
+                <p className="mt-4 text-sm font-medium text-white">
+                  {study.metric}
                 </p>
 
-                <div className="mt-auto flex flex-col items-start gap-4">
-                  <Pill size="md">{study.tag}</Pill>
-                  <Link
-                    to={study.to}
-                    viewTransition
-                    aria-label={`Explore ${study.title}`}
-                    className="text-xs uppercase tracking-widest text-zinc-500 transition-colors hover:text-white after:absolute after:inset-0 after:content-['']"
-                  >
-                    Explore <span aria-hidden="true">→</span>
-                  </Link>
+                <div className="mt-auto pt-6">
+                  <TextLink to={study.to} stretched srLabel={study.title}>
+                    Read the Case Study
+                  </TextLink>
                 </div>
-              </div>
-            ))}
-          </div>
+              </LinkCard>
+            );
+          })}
         </div>
       </div>
-    </>
+    </div>
   );
 }

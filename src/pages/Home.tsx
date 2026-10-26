@@ -1,25 +1,21 @@
-import DecisionField from "../animations/DecisionField";
-import Hero from "../components/Hero";
-import Projects from "../components/Projects";
-import SupplyEngine from "../components/SupplyEngine";
-import OperatingModel from "../components/OperatingModel";
-import OperatingDiagram from "../components/OperatingDiagram";
-import SectionTransition from "@/components/SectionTransition";
+import About from "@/components/About";
 import ContactSection from "@/components/ContactSection";
+import FeaturedSystem from "@/components/FeaturedSystem";
+import Hero from "@/components/Hero";
+import LoopInPractice from "@/components/LoopInPractice";
+import OperatingModel from "@/components/OperatingModel";
+import SelectedImpact from "@/components/home/SelectedImpact";
 
 export default function Home() {
   return (
     <>
-      <DecisionField />
       <Hero />
-      <SectionTransition />
-      <Projects />
-      <SupplyEngine />
-      <SectionTransition />
+      <SelectedImpact />
+      <FeaturedSystem />
       <OperatingModel />
-      <OperatingDiagram />
+      <LoopInPractice />
+      <About />
       <ContactSection />
-      <div className="h-[50vh]" />
     </>
   );
 }

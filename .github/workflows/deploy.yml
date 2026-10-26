@@ -4,45 +4,81 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**.md"
+      - "graphify-out/**"
+      - ".claude/**"
+      - "alpha-lyrae-master/**"
+      - ".gitignore"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "graphify-out/**"
+      - ".claude/**"
+      - "alpha-lyrae-master/**"
+      - ".gitignore"
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
 
-      # Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # Build Vite project
+      # Builds the client, the server bundle, the OG images and the prerendered pages.
       - name: Build project
         run: npm run build
-      # testing again
-      # Sync dist folder to S3
-      - name: Deploy to S3
+
+      - name: Verify prerendered output
         run: |
-          aws s3 sync dist s3://ahadk.com \
-          --delete \
-          --cache-control "no-cache"
+          node scripts/serve-dist.mjs &
+          sleep 2
+          node scripts/verify-dist.mjs
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      # Uploads pages as HTML at clean URLs (see scripts/deploy-s3.sh).
+      - name: Deploy to S3
+        run: bash scripts/deploy-s3.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION: us-east-1
 
-      # Invalidate CloudFront cache
       - name: Invalidate CloudFront
         run: |
-            aws cloudfront create-invalidation \
+          aws cloudfront create-invalidation \
             --distribution-id E20RKY49H6KE5B \
             --paths "/*"
         env:

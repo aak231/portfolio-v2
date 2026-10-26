@@ -1,61 +1,28 @@
+import Section from "@/components/home/Section";
+import { TextLink } from "@/components/ui/links";
+import { PRINCIPLES } from "@/content/home";
+
 export default function OperatingModel() {
   return (
-    <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <span className="section-label">Framework</span>
-          <h2 className="text-3xl md:text-4xl font-semibold text-white">
-            Operating Principles
-          </h2>
-          <p className="text-zinc-500 mt-4 max-w-2xl">
-            The systems mindset I apply to product strategy, execution, and
-            iteration.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Instrument Before Opinion",
-              points: [
-                "Define measurable north star and guardrail metrics before shipping solutions.",
-                "Design event taxonomy across funnels",
-                "Establish behavioral baselines",
-              ],
-            },
-            {
-              title: "Optimize Systems, Not Screens",
-              points: [
-                "Diagnose structural drop offs across funnels and feedback loops",
-                "Balance supply and demand dynamics",
-                "Quantify marginal performance lift",
-              ],
-            },
-            {
-              title: "Evidence Driven Iteration",
-              points: [
-                "Cohort based analysis",
-                "Experiment impact measurement",
-                "Translate behavioral signals into prioritization and roadmap direction",
-              ],
-            },
-          ].map((item) => (
-            <div key={item.title} className="card-surface p-6">
-              <h3 className="text-white text-lg font-medium mb-5">
-                {item.title}
-              </h3>
+    <Section>
+      <span className="section-label">Framework</span>
+      <h2 className="text-3xl font-semibold text-white md:text-4xl">
+        {PRINCIPLES.title}
+      </h2>
+      <p className="mt-3 text-body">{PRINCIPLES.subtitle}</p>
 
-              <ul className="space-y-3 text-sm text-zinc-400">
-                {item.points.map((point) => (
-                  <li key={point} className="flex gap-3">
-                    <span className="text-amber-400">•</span>
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
+        {PRINCIPLES.cards.map((card) => (
+          <div key={card.title} className="card-surface flex flex-col p-6">
+            <h3 className="text-lg font-medium text-white">{card.title}</h3>
+            <p className="mt-3 text-body">{card.text}</p>
+            <p className="mt-auto pt-5 text-sm text-caption">
+              Seen in:{" "}
+              <TextLink to={card.seen.to}>{card.seen.label}</TextLink>
+            </p>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }

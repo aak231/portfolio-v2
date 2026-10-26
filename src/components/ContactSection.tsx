@@ -1,151 +1,66 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Check, Copy } from "lucide-react";
+import Section from "@/components/home/Section";
+import { ButtonLink } from "@/components/ui/links";
+import { CONTACT_COPY as CONTENT_CONTACT } from "@/content/home";
+import { CONTACT } from "@/data/site";
 
 export default function ContactSection() {
-  const email = "ahadaak231@gmail.com";
-  const linkedinUrl = "https://www.linkedin.com/in/ahadtheengineer/";
+  const [copied, setCopied] = useState(false);
 
-  const [copied, setCopied] = useState<string | null>(null);
+  useEffect(() => {
+    if (!copied) return;
+    const id = window.setTimeout(() => setCopied(false), 1800);
+    return () => window.clearTimeout(id);
+  }, [copied]);
 
-  const handleCopy = async (value: string, label: string) => {
-    await navigator.clipboard.writeText(value);
-    setCopied(label);
-    setTimeout(() => setCopied(null), 1500);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT.email);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
-    <section className="relative z-10 pt-10 md:pt-12 pb-16 md:pb-20 px-6 md:px-8">
-      <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold text-white">
-          Let’s Build Systems That Compound
+    <Section id="contact" className="pb-16">
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 className="text-3xl font-semibold text-white md:text-4xl">
+          {CONTENT_CONTACT.heading}
         </h2>
+        <p className="mx-auto mt-4 text-body">{CONTENT_CONTACT.subline}</p>
 
-        <p className="text-zinc-500 mt-6 leading-relaxed">
-          If you’re building thoughtful, high impact products and care about
-          systems that scale, I’m always open to meaningful conversations.
-        </p>
-
-        <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6">
-          {/* EMAIL */}
-          <div
-            className="
-              bg-zinc-900/60
-              border border-white/5
-              backdrop-blur-sm
-              rounded-2xl
-              px-6 py-4
-              flex items-center justify-between
-              gap-3
-              min-w-[280px]
-              transition-all duration-300
-              hover:border-amber-400/40
-              hover:shadow-[0_0_20px_rgba(251,191,36,0.08)]
-            "
-          >
+        <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <div className="card-surface flex items-center justify-between gap-3 py-1.5 pl-5 pr-1.5">
             <a
-              href={`mailto:${email}`}
-              className="text-white text-sm tracking-wide"
+              href={`mailto:${CONTACT.email}`}
+              className="font-medium text-white underline decoration-gold/40 underline-offset-4 transition-colors hover:decoration-gold"
             >
-              {email}
+              {CONTACT.email}
             </a>
-
             <button
-              onClick={() => handleCopy(email, "email")}
-              className="text-amber-400 hover:text-white transition-colors"
+              type="button"
+              onClick={copyEmail}
+              aria-label={copied ? "Email copied" : "Copy email address"}
+              className="flex h-11 w-11 items-center justify-center rounded-xl text-gold transition-colors hover:bg-gold/10"
             >
-              {copied === "email" ? (
-                /* Check Icon */
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+              {copied ? (
+                <Check aria-hidden="true" className="h-4 w-4" />
               ) : (
-                /* Copy Icon */
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="9" y="9" width="13" height="13" rx="2" />
-                  <path d="M5 15V5a2 2 0 012-2h10" />
-                </svg>
+                <Copy aria-hidden="true" className="h-4 w-4" />
               )}
             </button>
           </div>
 
-          {/* LINKEDIN */}
-          <div
-            className="
-              bg-zinc-900/60
-              border border-white/5
-              backdrop-blur-sm
-              rounded-2xl
-              px-6 py-4
-              flex items-center justify-between
-              gap-3
-              min-w-[280px]
-              transition-all duration-300
-              hover:border-amber-400/40
-              hover:shadow-[0_0_20px_rgba(251,191,36,0.08)]
-            "
-          >
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white text-sm tracking-wide"
-            >
-              LinkedIn
-            </a>
-
-            <button
-              onClick={() => handleCopy(linkedinUrl, "linkedin")}
-              className="text-amber-400 hover:text-white transition-colors"
-            >
-              {copied === "linkedin" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="9" y="9" width="13" height="13" rx="2" />
-                  <path d="M5 15V5a2 2 0 012-2h10" />
-                </svg>
-              )}
-            </button>
-          </div>
+          <ButtonLink href={CONTACT.linkedin} external variant="secondary">
+            LinkedIn
+          </ButtonLink>
         </div>
+        <p role="status" className="sr-only">
+          {copied ? "Email address copied to clipboard" : ""}
+        </p>
       </div>
-    </section>
+    </Section>
   );
 }

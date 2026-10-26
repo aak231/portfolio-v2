@@ -11,179 +11,63 @@ type Node = {
 
 const NODE_POOL_SIZE = 300;
 
+/**
+ * Constellation background, confined to its parent (the hero section).
+ * Nothing here reads window during render, so it is safe to prerender.
+ */
 export default function DecisionField() {
-  const initialIsMobile = window.innerWidth < 768;
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const nodesRef = useRef<Node[]>([]);
-  const isMobileRef = useRef<boolean>(initialIsMobile);
-  const maxNodesRef = useRef<number>(initialIsMobile ? 120 : 300);
-  const activeCountRef = useRef<number>(initialIsMobile ? 60 : 100);
-  const fpsRef = useRef<number[]>([]);
-  const lastTimeRef = useRef<number>(0);
-  const rafIdRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const parent = canvas?.parentElement;
+    if (!canvas || !parent) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-      const wasMobile = isMobileRef.current;
-      const isMobile = window.innerWidth < 768;
-      isMobileRef.current = isMobile;
-
-      if (isMobile !== wasMobile) {
-        maxNodesRef.current = isMobile ? 120 : 300;
-        activeCountRef.current = isMobile ? 60 : 100;
-      }
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-
-    if (nodesRef.current.length === 0) {
-      const nodes: Node[] = [];
-      for (let i = 0; i < NODE_POOL_SIZE; i++) {
-        const x = Math.random() * window.innerWidth;
-        const y = Math.random() * window.innerHeight;
-        nodes.push({
-          x,
-          y,
-          vx: 0,
-          vy: 0,
-          baseX: x,
-          baseY: y,
-        });
-      }
-      nodesRef.current = nodes;
-    }
-
-    const mouse = { x: 0, y: 0, px: 0, py: 0 };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.px = mouse.x;
-      mouse.py = mouse.y;
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
+    let W = 0;
+    let H = 0;
+    let sized = false;
+    let isMobile = false;
+    let maxNodes = 300;
+    let active = 100;
     let t = 0;
-    let scrollProgress = 0;
-    let lastScroll = window.scrollY;
-    let scrollVelocity = 0;
+    let rafId = 0;
+    let running = false;
+    let lastTime = 0;
+    const fps: number[] = [];
+    const mouse = { x: -9999, y: -9999, vx: 0, vy: 0 };
 
-    const updateScroll = () => {
-      const current = window.scrollY;
-      scrollVelocity = current - lastScroll;
-      lastScroll = current;
+    const nodes = nodesRef.current;
 
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-
-      scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    const seedNodes = () => {
+      if (nodes.length > 0) return;
+      for (let i = 0; i < NODE_POOL_SIZE; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        nodes.push({ x, y, vx: 0, vy: 0, baseX: x, baseY: y });
+      }
     };
 
-    updateScroll();
-    window.addEventListener("scroll", updateScroll);
-
-    const loop = (time: number) => {
-      if (!ctx) return;
-
-      const isMobile = isMobileRef.current;
-
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height * 0.35,
-        0,
-        canvas.width / 2,
-        canvas.height * 0.35,
-        canvas.width,
-      );
-
-      gradient.addColorStop(0, "#19191b");
-      gradient.addColorStop(0.7, "#121214");
-      gradient.addColorStop(1, "#0a0a0d");
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+    const step = () => {
       t += 0.01;
+      mouse.vx *= 0.9;
+      mouse.vy *= 0.9;
+      const mouseSpeed = Math.hypot(mouse.vx, mouse.vy);
 
-      const mouseVX = mouse.x - mouse.px;
-      const mouseVY = mouse.y - mouse.py;
-      const mouseSpeed = Math.sqrt(mouseVX * mouseVX + mouseVY * mouseVY);
-
-      const delta = time - (lastTimeRef.current || time);
-      lastTimeRef.current = time;
-
-      const fps = 1000 / delta;
-      fpsRef.current.push(fps);
-      if (fpsRef.current.length > 30) fpsRef.current.shift();
-
-      const avgFps =
-        fpsRef.current.reduce((a, b) => a + b, 0) / fpsRef.current.length;
-
-      if (avgFps < 50 && activeCountRef.current > 60) {
-        activeCountRef.current -= 5;
-      } else if (avgFps > 58 && activeCountRef.current < maxNodesRef.current) {
-        activeCountRef.current += 2;
-      }
-      // ------------------------------------------------
-      // LINEAR SCROLL COMPRESSION (CAPPED + TUNABLE)
-      // ------------------------------------------------
-
-      // Master compression amount (0 to 1)
-      // 0.4 = 40% compression
-      // 0.5 = 50% compression
-      const MAX_COMPRESSION = 0.25;
-
-      // How fast compression responds to scroll
-      // 1 = perfectly linear
-      // 0.8 = slower response
-      // 1.2 = slightly stronger response
-      const COMPRESSION_RESPONSE = 0.8;
-
-      // Linear mapping
-      let compression = scrollProgress * scrollProgress * COMPRESSION_RESPONSE;
-
-      // Clamp to maximum compression
-      compression = Math.min(compression, MAX_COMPRESSION);
-
-      const baseThreshold = isMobile ? 60 : 80;
-      const dynamicThreshold =
-        baseThreshold + compression * (isMobile ? 80 : 120);
-      const dynamicThresholdSq = dynamicThreshold * dynamicThreshold;
-
-      const compressionStrength = compression * 0.0004;
-
-      const nodes = nodesRef.current;
-
-      for (let i = 0; i < activeCountRef.current; i++) {
+      for (let i = 0; i < active; i++) {
         const n = nodes[i];
 
         n.vx += Math.sin(n.y * 0.002 + t) * 0.02;
         n.vy += Math.cos(n.x * 0.002 + t) * 0.02;
 
-        const dx = n.baseX - n.x;
-        const dy = n.baseY - n.y;
-
-        n.vx += dx * 0.00015;
-        n.vy += dy * 0.00015;
-
-        scrollVelocity *= 0.9;
-        n.vy += scrollVelocity * 0.01;
-
-        // Vertical compression
-        const centerY = canvas.height / 2;
-        const compressForce = (centerY - n.y) * compressionStrength;
-        n.vy += compressForce;
+        n.vx += (n.baseX - n.x) * 0.00015;
+        n.vy += (n.baseY - n.y) * 0.00015;
 
         const mx = n.x - mouse.x;
         const my = n.y - mouse.y;
@@ -191,59 +75,168 @@ export default function DecisionField() {
 
         if (dist < 180 && dist > 0.01) {
           const influence = (180 - dist) / 180;
-          const flowX = -mouseVY;
-          const flowY = mouseVX;
           const flowStrength = Math.min(mouseSpeed * 0.02, 2);
-
-          n.vx += flowX * influence * flowStrength * 0.02;
-          n.vy += flowY * influence * flowStrength * 0.02;
+          n.vx += -mouse.vy * influence * flowStrength * 0.02;
+          n.vy += mouse.vx * influence * flowStrength * 0.02;
         }
 
         n.vx *= 0.9;
         n.vy *= 0.9;
-
         n.x += n.vx;
         n.y += n.vy;
+      }
+    };
 
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+
+      const threshold = isMobile ? 60 : 80;
+      const thresholdSq = threshold * threshold;
+
+      ctx.fillStyle = "rgba(251,191,36,0.25)";
+      for (let i = 0; i < active; i++) {
         ctx.beginPath();
-        ctx.arc(n.x, n.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(251,191,36,0.25)`;
+        ctx.arc(nodes[i].x, nodes[i].y, 4, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      for (let i = 0; i < activeCountRef.current; i++) {
-        for (let j = i + 1; j < activeCountRef.current; j++) {
+      ctx.lineWidth = 1.2;
+      for (let i = 0; i < active; i++) {
+        for (let j = i + 1; j < active; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const distSq = dx * dx + dy * dy;
-
-          if (distSq < dynamicThresholdSq) {
-            const dist = Math.sqrt(distSq);
-            const proximity = 1 - dist / dynamicThreshold;
-
+          if (distSq < thresholdSq) {
+            const proximity = 1 - Math.sqrt(distSq) / threshold;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-
             ctx.strokeStyle = `rgba(251,191,36,${0.1 + proximity * 0.22})`;
-            ctx.lineWidth = 1.2;
             ctx.stroke();
           }
         }
       }
-
-      rafIdRef.current = requestAnimationFrame(loop);
     };
 
-    rafIdRef.current = requestAnimationFrame(loop);
+    const loop = (time: number) => {
+      if (!running) return;
+      const delta = lastTime ? time - lastTime : 0;
+      lastTime = time;
+
+      if (delta > 0) {
+        fps.push(1000 / delta);
+        if (fps.length > 30) fps.shift();
+        const avg = fps.reduce((a, b) => a + b, 0) / fps.length;
+        if (avg < 50 && active > 60) active -= 5;
+        else if (avg > 58 && active < maxNodes) active += 2;
+      }
+
+      step();
+      draw();
+      rafId = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      if (running || reduced) return;
+      running = true;
+      lastTime = 0;
+      rafId = requestAnimationFrame(loop);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(rafId);
+    };
+
+    const resize = () => {
+      const rect = parent.getBoundingClientRect();
+      const nw = Math.max(1, Math.round(rect.width));
+      const nh = Math.max(1, Math.round(rect.height));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = nw * dpr;
+      canvas.height = nh * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (nodes.length === 0) {
+        W = nw;
+        H = nh;
+        seedNodes();
+        if (reduced) {
+          for (let i = 0; i < 120; i++) step();
+        }
+      } else if (W > 0 && H > 0) {
+        const sx = nw / W;
+        const sy = nh / H;
+        for (const n of nodes) {
+          n.x *= sx;
+          n.y *= sy;
+          n.baseX *= sx;
+          n.baseY *= sy;
+        }
+      }
+      W = nw;
+      H = nh;
+
+      const mobile = nw < 768;
+      if (!sized || mobile !== isMobile) {
+        sized = true;
+        isMobile = mobile;
+        maxNodes = mobile ? 120 : 300;
+        active = mobile ? 60 : 100;
+      }
+
+      if (reduced) draw();
+    };
+
+    const onMove = (e: MouseEvent) => {
+      const r = parent.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      if (mouse.x > -9000) {
+        mouse.vx = x - mouse.x;
+        mouse.vy = y - mouse.y;
+      }
+      mouse.x = x;
+      mouse.y = y;
+    };
+
+    const onLeave = () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+      mouse.vx = 0;
+      mouse.vy = 0;
+    };
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(parent);
+    resize();
+
+    let intersection: IntersectionObserver | undefined;
+    if (!reduced) {
+      parent.addEventListener("mousemove", onMove);
+      parent.addEventListener("mouseleave", onLeave);
+      intersection = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      });
+      intersection.observe(parent);
+    }
 
     return () => {
-      cancelAnimationFrame(rafIdRef.current);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("scroll", updateScroll);
+      stop();
+      resizeObserver.disconnect();
+      intersection?.disconnect();
+      parent.removeEventListener("mousemove", onMove);
+      parent.removeEventListener("mouseleave", onLeave);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 h-full w-full [mask-image:linear-gradient(to_bottom,#000_70%,transparent)]"
+    />
+  );
 }

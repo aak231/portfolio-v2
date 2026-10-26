@@ -1,16 +1,21 @@
 import {
+  Callout,
+  CaseNav,
   CaseSection,
   CaseStudyPage,
   ChartPanel,
   DetailCards,
   DiagramCard,
   IllustrationNote,
+  MyRoleCard,
   OutcomeCard,
-  Pill,
   Prose,
-  QuestionChips,
+  QaList,
   SectionTitle,
+  TldrBlock,
+  TradeOffs,
 } from "@/components/CaseStudy";
+import Stepper from "@/components/Stepper";
 import { CHART_AMBER, CHART_GREY } from "@/components/chartColors";
 
 const LEAD_TYPES = ["Small rental", "Mid-size sale", "Large sale"];
@@ -20,32 +25,46 @@ const VALUE_BARS = [30, 58, 100];
 const PROCESS_STEPS = [
   {
     title: "Launch Flat",
-    desc: "One price per lead type, to learn what agencies would pay.",
+    caption: "One price per lead type, to learn what agencies would pay.",
   },
   {
-    title: "Read the Behaviour",
-    desc: "Watched which leads sold, which sat, and where one price stopped fitting.",
+    title: "Read the Behavior",
+    caption:
+      "Watched which leads sold, which sat, and where one price stopped fitting.",
   },
   {
     title: "Design the Model",
-    desc: "Prices that follow each lead’s value, built with BI.",
+    caption: "Prices that follow each lead’s value, built with BI.",
   },
   {
     title: "Replay History",
-    desc: "Ran the model on months of past leads before any agency saw a price.",
-    badge: "Go-Live Check",
+    caption:
+      "Ran the model on months of past leads before any agency saw a price.",
+    tag: "Go-Live Check",
   },
   {
     title: "Go Live and Tune",
-    desc: "Prices shown before unlock, then tuned as agencies respond.",
+    caption: "Prices shown before unlock, then tuned as agencies respond.",
   },
 ];
 
-const REPLAY_QUESTIONS = [
-  { text: "How do prices spread across leads?" },
-  { text: "Who pays more, and who pays less, than today?" },
-  { text: "Can every lead get a price?" },
-  { text: "What do the extremes look like?" },
+const REPLAY_FINDINGS = [
+  {
+    q: "How do prices spread across leads?",
+    a: "Much wider than flat pricing. Most leads landed below the old flat price, and a smaller group of high-value leads above it.",
+  },
+  {
+    q: "Who pays more, and who pays less, than today?",
+    a: "Rental leads mostly got cheaper. Sale leads for higher-value homes got more expensive.",
+  },
+  {
+    q: "Can every lead get a price?",
+    a: "Not at first. The model was too specific, so some leads had nothing to match. Falling back to broader areas closed most of the gap.",
+  },
+  {
+    q: "What do the extremes look like?",
+    a: "A small number of leads came out far above anything agencies had paid, mostly because of bad input prices. That put limits and input checks on the go-live list.",
+  },
 ];
 
 const DETAIL_CARDS = [
@@ -59,12 +78,31 @@ const DETAIL_CARDS = [
   },
   {
     title: "Guardrails",
-    desc: "The test surfaced edge cases: leads with too little data to price with confidence, and prices that looked too high or too low. We treated them as conditions for going live: a price for every lead, limits at both ends, and a check on how the model behaves when data is thin.",
+    desc: "The test surfaced edge cases: leads with too little data to price with confidence, and prices that looked too high or too low. They became the checklist we took into go-live: a price for every lead, limits at both ends, and a check on how the model behaves when data is thin.",
   },
   {
     title: "Rollout",
     desc: "Pricing touches agencies, Sales, Operations and Tech, so the rollout had its own plan: an internal update on how prices are decided, and one clear message for agencies. You now see the price on every lead before you unlock it.",
   },
+];
+
+const TRADE_OFFS = [
+  {
+    choice: "Flat prices first.",
+    detail:
+      "We gave up some revenue on high-value leads early, but learned what agencies would pay before modeling it.",
+  },
+  {
+    choice: "Replay before go-live.",
+    detail:
+      "It slowed the launch, but the edge cases showed up in a test instead of on agencies’ bills.",
+  },
+];
+
+const WATCHING = [
+  "Which leads sell at their new price",
+  "Whether more agencies take part",
+  "Whether value per lead holds as prices spread out",
 ];
 
 function BarPanel({
@@ -84,7 +122,7 @@ function BarPanel({
         <div className="mt-6 grid grid-cols-3 gap-3 md:gap-4">
           {LEAD_TYPES.map((label, i) => (
             <div key={label} className="flex flex-col items-stretch">
-              <div className="flex h-40 items-end border-b border-white/10 md:h-48">
+              <div className="flex h-40 items-end border-b border-line md:h-48">
                 <div
                   className="w-full rounded-t-xl"
                   style={{
@@ -93,67 +131,13 @@ function BarPanel({
                   }}
                 />
               </div>
-              <div className="mt-3 text-center text-xs text-zinc-400 md:text-sm">
+              <div className="mt-3 text-center text-xs text-caption md:text-sm">
                 {label}
               </div>
             </div>
           ))}
         </div>
       </ChartPanel>
-    </div>
-  );
-}
-
-function ProcessTimeline() {
-  return (
-    <div className="relative">
-      <div
-        aria-hidden="true"
-        className="absolute bottom-5 left-5 top-5 w-px bg-white/10 lg:bottom-auto lg:left-[10%] lg:right-[10%] lg:top-5 lg:h-px lg:w-auto"
-      />
-      <ol className="relative lg:grid lg:grid-cols-5 lg:gap-4">
-        {PROCESS_STEPS.map((step) => {
-          const active = Boolean(step.badge);
-          return (
-            <li
-              key={step.title}
-              className="relative flex gap-5 pb-8 last:pb-0 lg:flex-col lg:items-center lg:gap-0 lg:pb-0 lg:text-center"
-            >
-              <div
-                className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border bg-[#121214] ${
-                  active
-                    ? "border-amber-400/70 shadow-[0_0_14px_rgba(251,191,36,0.35)] ring-4 ring-amber-400/10"
-                    : "border-white/10"
-                }`}
-              >
-                <span
-                  className={`block rounded-full bg-amber-400 ${
-                    active ? "h-3 w-3" : "h-2 w-2"
-                  }`}
-                />
-              </div>
-
-              <div className="min-w-0 pt-1.5 lg:mt-5 lg:pt-0">
-                {step.badge && (
-                  <Pill size="md" className="mb-2">
-                    {step.badge}
-                  </Pill>
-                )}
-                <h3
-                  className={`text-lg font-medium ${
-                    active ? "text-amber-400" : "text-white"
-                  }`}
-                >
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-                  {step.desc}
-                </p>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
     </div>
   );
 }
@@ -165,6 +149,12 @@ export default function SellerLeadsPricing() {
       title="Pricing the Seller Leads Marketplace"
       subtitle="How we moved a marketplace from flat prices to prices that reflect each lead’s value, and tested the model on past leads before it went live."
     >
+      <TldrBlock
+        problem="Flat prices treated a small rental and a large sale as the same opportunity."
+        decision="Price each lead on its value, and replay the model on past leads before any agency saw a price."
+        result="Value-based pricing is live, with its gaps found before launch instead of after."
+      />
+
       <CaseSection title="The Problem">
         <Prose>
           We launched with flat prices, on purpose. One price for each type of
@@ -187,7 +177,7 @@ export default function SellerLeadsPricing() {
           before they unlock.
         </Prose>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
           <BarPanel
             title="Flat Pricing"
             heights={FLAT_BARS}
@@ -204,23 +194,55 @@ export default function SellerLeadsPricing() {
         <IllustrationNote>Illustration only, not real prices.</IllustrationNote>
       </CaseSection>
 
-      <section className="mb-8">
+      <section>
         <SectionTitle>The Process</SectionTitle>
-        <DiagramCard>
-          <ProcessTimeline />
-          <QuestionChips
-            title="What the Replay Had to Answer"
-            items={REPLAY_QUESTIONS}
-          />
-        </DiagramCard>
-        <DetailCards cards={DETAIL_CARDS} />
+        <div className="space-y-5">
+          <DiagramCard>
+            <Stepper label="How the pricing model was built" steps={PROCESS_STEPS} />
+            <QaList title="What the Replay Found" items={REPLAY_FINDINGS} />
+          </DiagramCard>
+          <DetailCards cards={DETAIL_CARDS} />
+        </div>
       </section>
 
-      <OutcomeCard stat="Live">
-        Value-based pricing is now running in the marketplace. The early weeks
-        are about reading how agencies respond, such as which prices move and
-        which leads sell, before tuning the model further.
+      <TradeOffs items={TRADE_OFFS} />
+
+      <OutcomeCard
+        stat="Live"
+        extra={
+          <div className="mt-6 border-t border-line pt-5">
+            <h3 className="text-sm font-semibold text-white">
+              What We’re Watching
+            </h3>
+            <ul className="mt-3 list-disc space-y-1.5 pl-5 text-body marker:text-gold">
+              {WATCHING.map((w) => (
+                <li key={w}>{w}</li>
+              ))}
+            </ul>
+          </div>
+        }
+      >
+        Value-based pricing is running in the marketplace. The early weeks are
+        about reading how agencies respond before tuning the model further.
       </OutcomeCard>
+
+      <MyRoleCard>
+        <Prose>
+          I shaped the pricing approach with BI, ran the replay on past leads
+          before launch, and planned the rollout across Sales, Operations and
+          Tech, including the internal update and the message to agencies.
+        </Prose>
+      </MyRoleCard>
+
+      <Callout title="What I’d Do Differently">
+        <Prose>
+          Check data coverage before tuning the formula. The biggest issues in
+          the replay came from leads the model could not see, not from the
+          math.
+        </Prose>
+      </Callout>
+
+      <CaseNav id="seller-leads-pricing" />
     </CaseStudyPage>
   );
 }

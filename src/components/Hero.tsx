@@ -1,49 +1,48 @@
-import { useNavigate } from "react-router-dom";
-import HeroImage from "./HeroImage";
+import DecisionField from "@/animations/DecisionField";
 import GlassSurface from "@/components/GlassSurface";
+import HeroImage from "@/components/HeroImage";
+import { ButtonLink } from "@/components/ui/links";
+import { HERO } from "@/content/home";
 
 export default function Hero() {
-  const navigate = useNavigate();
-
   return (
-    <section className="relative z-10 pt-28 pb-16 md:pt-32 md:pb-20 px-6 md:px-8">
-      <div className="w-full max-w-6xl mx-auto flex justify-center">
-        <GlassSurface className="w-full max-w-5xl p-10 md:p-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <section className="relative isolate overflow-hidden px-6 pb-12 pt-28 md:px-8 md:pb-16 md:pt-32">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_50%_35%,#19191b,transparent_70%)]"
+      />
+      <DecisionField />
+
+      <div className="mx-auto flex w-full max-w-6xl justify-center">
+        <GlassSurface className="w-full max-w-5xl p-6 sm:p-10 md:p-14">
+          <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14">
             <div className="space-y-6">
-              <h1 className="text-7xl font-bold text-white tracking-tight">
+              <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl">
                 Ahad Khan
               </h1>
 
-              <h2 className="text-sm md:text-base text-white/70 uppercase tracking-[0.28em]">
+              <p className="text-sm uppercase tracking-[0.28em] text-body md:text-base">
                 Product × Data × Systems
-              </h2>
-
-              <p className="text-lg text-white/70 max-w-xl leading-relaxed">
-                I design and scale product systems powered by data. From growth
-                funnels to marketplace infrastructure, I operate at the
-                intersection of product, data and execution.
               </p>
 
-              <button
-                onClick={() =>
-                  navigate("/systems-in-practice", { viewTransition: true })
-                }
-                className="
-                  border border-amber-400/70 
-                  text-amber-400 
-                  px-6 py-3 
-                  rounded-2xl 
-                  hover:bg-amber-400 
-                  hover:text-black 
-                  transition-all duration-300
-                "
-              >
-                View Systems in Practice
-              </button>
+              <p className="text-lg text-body">{HERO.intro}</p>
+              <p className="text-sm text-caption">{HERO.note}</p>
+
+              <div className="flex flex-wrap gap-3">
+                <ButtonLink to="/systems-in-practice">
+                  Read the Case Studies
+                </ButtonLink>
+                <ButtonLink
+                  href="#contact"
+                  variant="secondary"
+                  icon={null}
+                >
+                  Get in Touch
+                </ButtonLink>
+              </div>
             </div>
 
-            <HeroImage />
+            <HeroImage priority />
           </div>
         </GlassSurface>
       </div>

@@ -4,6 +4,10 @@
     {
       "name": "portfolio-dev-attach",
       "url": "http://localhost:5173"
+    },
+    {
+      "name": "portfolio-dist",
+      "url": "http://localhost:4173"
     }
   ]
 }

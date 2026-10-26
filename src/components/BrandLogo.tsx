@@ -1,7 +1,6 @@
 import bayutLogo from "@/assets/bayut_grey.png";
 import dubizzleLogo from "@/assets/dubizzle_grey.png";
-
-export type Brand = "bayut" | "dubizzle";
+import type { Brand } from "@/data/caseStudies";
 
 // The source PNGs have different built-in padding, so each brand needs its own height.
 const BRANDS: Record<Brand, { src: string; alt: string; size: string }> = {

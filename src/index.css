@@ -1,167 +1,128 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-html {
-  background-color: #0a0a0d;
+@theme static {
+  --font-sans: "Alpha Lyrae", ui-sans-serif, system-ui, sans-serif;
+  --color-page: #0a0a0d;
+  --color-card: #121215;
+  --color-body: #c4c4cc;
+  --color-caption: #9a9aa3;
+  --color-line: #26262b;
+  --color-gold: #fbbf24;
 }
 
-@layer utilities {
-  .card-surface {
-    background: rgba(24, 24, 27, 0.6); /* zinc-900/60 */
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
-    border-radius: 1rem;
-    backdrop-filter: blur(8px);
-    transition: border-color 0.3s ease;
+/* Alpha Lyrae ships a single weight (Medium, 500). Lighter weights use it as-is and
+   600 and above are synthesized by the browser, so the site's weight hierarchy is kept. */
+@font-face {
+  font-family: "Alpha Lyrae";
+  src:
+    url("./assets/fonts/AlphaLyrae-Medium.woff2") format("woff2"),
+    url("./assets/fonts/AlphaLyrae-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-page);
   }
 
-  .card-surface:hover,
-  .card-surface:has(*:hover) {
-    border-color: rgba(255, 255, 255, 0.18);
+  body {
+    font-family: var(--font-sans);
+    /* Alpha Lyrae's contextual alternates turn every 4th glyph into a pixelated one. */
+    font-feature-settings: "calt" 0;
+    font-variant-ligatures: no-contextual;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-body);
+    background-color: var(--color-page);
   }
 
-  .section-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgb(113 113 122); /* zinc-500 */
-    margin-bottom: 0.75rem;
-    display: block;
-  }
-
-  @keyframes ripple {
-    0% {
-      opacity: 0;
-      transform: scale(0.7);
-    }
-    40% {
-      opacity: 0.8;
-    }
-    100% {
-      opacity: 0;
-      transform: scale(1.4);
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.0625rem;
     }
   }
 
-  .animate-ripple1 {
-    animation: ripple 1.2s ease-out forwards;
+  /* Zero specificity: any max-w-* utility still wins. Cards stay wide. */
+  :where(p, li, dd) {
+    max-width: 68ch;
   }
 
-  .animate-ripple2 {
-    animation: ripple 1.2s ease-out forwards;
-    animation-delay: 0.25s;
+  /* Pinned so transition-colors never animates the ring from white to gold. */
+  * {
+    outline-color: var(--color-gold);
   }
 
-@keyframes signalMove {
-  0% {
-    transform: translateX(-40px);
-    opacity: 0;
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
   }
 
-  20% {
-    opacity: 1;
-  }
-
-  80% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateX(40px);
-    opacity: 0;
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: #fff;
   }
 }
 
-.signal {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #fbbf24;
-  border-radius: 999px;
-  animation: signalMove 2.5s linear infinite;
-  box-shadow: 0 0 8px rgba(251,191,36,0.8);
-}
-
-  @keyframes decisionLoopFlow {
-    0% {
-      stroke-dashoffset: 0;
-      opacity: 0.3;
-    }
-
-    50% {
-      opacity: 1;
-    }
-
-    100% {
-      stroke-dashoffset: -80;
-      opacity: 0.3;
-    }
-  }
-
-  .decision-loop-segment {
-    stroke-dasharray: 6 10;
-  }
-
-  .decision-loop-segment-active {
-    animation: decisionLoopFlow 3s linear infinite;
-  }
-
-  /* Nodes are moved by SVG animateMotion (on the ellipse path), not CSS rotation */
-  .decision-loop-node-wrap {
-    /* animateMotion moves this group along the path */
-  }
-
-  @keyframes decision-loop-node-pulse {
-    0%,
-    100% {
-      opacity: 0.8;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-
-  .decision-loop-node {
-    fill: #fbbf24;
-    filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.7));
-    animation: decision-loop-node-pulse 1.5s ease-in-out infinite;
-  }
-
-  .decision-loop-node:nth-child(1) {
-    animation-delay: 0s;
-  }
-  .decision-loop-node:nth-child(2) {
-    animation-delay: 0.15s;
-  }
-  .decision-loop-node:nth-child(3) {
-    animation-delay: 0.3s;
-  }
-  .decision-loop-node:nth-child(4) {
-    animation-delay: 0.45s;
-  }
-  .decision-loop-node:nth-child(5) {
-    animation-delay: 0.6s;
-  }
-
-@keyframes nodeActivate {
-  0% {
-    opacity: 0;
-    transform: translateY(8px) scale(0.92);
-  }
-
-  60% {
-    opacity: 1;
-    transform: translateY(-2px) scale(1.05);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-.node-animate {
-  opacity: 0;
-  animation: nodeActivate 0.6s ease forwards;
+@utility card-surface {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+}
+
+@utility card-link {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+@utility section-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-caption);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+@utility dash-gold-h {
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-gold) 0 6px,
+    transparent 6px 11px
+  );
+}
+
+@utility dash-gold-v {
+  width: 2px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-gold) 0 6px,
+    transparent 6px 11px
+  );
 }
 
 ::view-transition-old(root),
@@ -202,9 +163,16 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
   }
-}
 }

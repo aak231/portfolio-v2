@@ -1,209 +1,183 @@
 import {
+  Callout,
+  CaseNav,
   CaseSection,
   CaseStudyPage,
   DetailCards,
   DiagramCard,
+  IntentQuestionCard,
+  MyRoleCard,
   OutcomeCard,
   Prose,
   SectionTitle,
+  TldrBlock,
+  TradeOffs,
 } from "@/components/CaseStudy";
+import Stepper from "@/components/Stepper";
+import { InlineLink } from "@/components/ui/links";
 
 const STEPS = [
-  "Intent Capture",
-  "Qualification",
-  "Marketplace",
-  "Unlock",
-  "Inventory Growth",
+  {
+    title: "Intent Capture",
+    caption: "Owners tell us they want to sell or rent.",
+  },
+  {
+    title: "Qualification",
+    caption: "Checks and verification remove noise.",
+  },
+  {
+    title: "Marketplace",
+    caption: "Agencies browse leads with contact details hidden.",
+  },
+  {
+    title: "Unlock",
+    caption: "Agencies spend credits to reveal the owner.",
+  },
+  {
+    title: "Inventory Growth",
+    caption:
+      "Unlocked leads help agencies win listings, which grows supply on the platforms.",
+  },
 ];
 
-const PILLARS = [
+const CARDS = [
   {
     title: "Capture Layer",
-    desc: "Multi entrypoint architecture across Bayut, dubizzle and TruEstimate with behavioral triggers and validation controls. Entry points were placed wherever intent was already forming — post-valuation on TruEstimate, mid-search on Bayut and dubizzle — rather than relying on a single generic intake form.",
+    desc: "Entry points sit where intent is already forming, such as after a TruEstimate valuation or mid-search on Bayut and dubizzle, with validation built in. We met owners in the journey they were already on instead of relying on one generic form.",
   },
   {
     title: "Qualification System",
-    desc: "Human and automated qualification layers including moderation via an Operations team, WhatsApp verification and BI pricing validation to increase trust and lead quality. This layered approach filtered out noise early, so downstream marketplace supply stayed high-trust without slowing down capture volume.",
+    desc: "A layered approach that combines people and automation, including Operations review, WhatsApp verification and pricing checks. Noise is filtered early, so the marketplace stays high-trust without slowing capture down.",
   },
   {
     title: "Marketplace Engine",
-    desc: "Credit driven unlock engine with timed access controls, emirate visibility flags and preference based distribution logic. Brokers spent credits to unlock a lead, and timed access windows kept supply moving instead of sitting with a single broker indefinitely.",
+    desc: "A credit-based unlock model. Agencies spend credits to unlock a lead, and timed access and visibility controls decide who sees it first, so supply keeps moving.",
   },
   {
     title: "Monetization Logic",
-    desc: "Pilot flat pricing evolving toward dynamic pricing based on intent strength, commission potential, market demand and qualification status. Starting with flat pricing let the team validate broker willingness-to-pay before introducing the complexity of a fully dynamic model.",
+    desc: (
+      <>
+        We started with flat pricing to learn what agencies would pay, then
+        moved to pricing that reflects each lead’s value. The full story is in
+        the{" "}
+        <InlineLink to="/systems-in-practice/seller-leads-pricing">
+          pricing case study
+        </InlineLink>
+        .
+      </>
+    ),
   },
 ];
 
-function StepFlow() {
-  return (
-    <ol
-      role="list"
-      className="flex w-full flex-col items-center gap-6 xl:flex-row xl:justify-center xl:gap-2"
-    >
-      {STEPS.map((step, i) => (
-        <li key={step} className="flex flex-col items-center xl:flex-row">
-          <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-zinc-800 px-4 py-2 xl:px-6 xl:py-2.5">
-            <span
-              className={`h-1.5 w-1.5 rounded-full ${
-                i === 0 ? "bg-amber-400" : "bg-amber-400/70"
-              }`}
-            />
-            {step}
-          </div>
-
-          {i !== STEPS.length - 1 && (
-            <>
-              <div
-                aria-hidden="true"
-                className="mx-2 hidden items-center xl:flex"
-              >
-                <div className="h-px w-8 bg-gradient-to-r from-white/10 to-amber-400/20" />
-                <svg
-                  className="h-3 w-3 text-amber-400/70"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 12h14M13 6l6 6-6 6"
-                  />
-                </svg>
-              </div>
-
-              <div
-                aria-hidden="true"
-                className="mt-4 flex flex-col items-center xl:hidden"
-              >
-                <div className="h-6 w-px bg-gradient-to-b from-white/10 to-amber-400/20" />
-                <svg
-                  className="mt-1 h-3 w-3 text-amber-400/70"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 5v14M6 13l6 6 6-6"
-                  />
-                </svg>
-              </div>
-            </>
-          )}
-        </li>
-      ))}
-    </ol>
-  );
-}
+const TRADE_OFFS = [
+  {
+    choice: "Validated before building.",
+    detail: "Slower to announce, but every later decision rested on evidence.",
+  },
+  {
+    choice: "Many entry points over one form.",
+    detail: "More to maintain, but owners are met where they already are.",
+  },
+  {
+    choice: "Flat prices at launch.",
+    detail:
+      "Simple and easy to explain, while we learned what agencies would pay.",
+  },
+];
 
 export default function SellerLeads() {
   return (
     <CaseStudyPage
       id="seller-leads"
       title="Designing the Seller Leads Marketplace"
-      subtitle="How a single validation experiment turned a “someday” idea into a structured seller acquisition system across Bayut and dubizzle."
+      subtitle="How one question on a WhatsApp lead turned a “someday” idea into a seller marketplace across Bayut and dubizzle."
     >
+      <TldrBlock
+        problem="Owners were contacting agents every day, but our data could not tell a seller from a buyer."
+        decision="Test demand with one extra question on an existing channel before building anything."
+        result="8K+ owner leads in the first four months, and a marketplace agencies now buy from with credits."
+      />
+
       <CaseSection title="The Problem">
         <Prose>
-          Management had a general sense that a dedicated seller acquisition
-          flow was something we’d eventually need to build, but it wasn’t
-          validated or prioritized. Every inbound WhatsApp conversation with an
-          agent looked identical from a data standpoint — there was no way to
-          tell whether the person reaching out wanted to sell, buy, or invest.
-          Seller intent was almost certainly buried in that traffic, but it was
-          invisible.
+          Management expected we would need a seller product one day, but it had
+          never been validated or prioritized.
+        </Prose>
+        <Prose>
+          Every WhatsApp conversation with an agent looked identical in our
+          data. We could not tell whether the person wanted to sell, buy or
+          invest. Seller intent was almost certainly in that traffic, but nobody
+          could see it.
         </Prose>
       </CaseSection>
 
-      <CaseSection title="The Hypothesis">
-        <Prose>
-          The underlying assumption was that seller intent already existed
-          within the platform’s inbound demand, but we had no reliable way to
-          identify or quantify it. If we could capture that intent at the point
-          of interaction, we could determine whether seller demand was large and
-          consistent enough to justify building a dedicated acquisition system.
-          The goal was not to build the full product immediately. It was to
-          reduce the uncertainty first.
-        </Prose>
+      <CaseSection title="The Bet: Intent Capture">
+        <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:items-center md:gap-10">
+          <div>
+            <Prose>
+              We believed seller intent was already inside our inbound traffic.
+              Instead of building a seller product on that belief, we tested it.
+            </Prose>
+            <Prose>
+              Intent Capture added one field to every WhatsApp lead sent to an
+              agent: why are you getting in touch? To sell or lease, to buy, or
+              to invest. It was a small change to an existing flow, with no new
+              journey to build.
+            </Prose>
+            <Prose>
+              Most people chose sell or lease. The question changed from “does
+              seller demand exist?” to “how do we turn it into supply agencies
+              can use?”
+            </Prose>
+          </div>
+          <IntentQuestionCard />
+        </div>
       </CaseSection>
 
-      <CaseSection title="The Experiment: Intent Capture">
-        <Prose>
-          Rather than committing to a full seller product before knowing if the
-          demand was real, we ran a lightweight experiment called{" "}
-          <span className="text-white">Intent Capture</span>: an additional
-          field added to every WhatsApp lead generated by agents on the
-          platform, simply asking why the user was reaching out — to sell/lease,
-          buy, or invest.
-        </Prose>
-        <Prose>
-          The majority of respondents selected sell/lease. That result was the
-          signal the business needed — it confirmed seller intent was large
-          enough and consistent enough to justify a dedicated acquisition
-          system, and it’s what accelerated the Seller Leads program from a
-          future idea into an active build.
-        </Prose>
-      </CaseSection>
-
-      <CaseSection title="The Decision">
-        <Prose>
-          Rather than committing to a dedicated seller acquisition journey
-          upfront, we chose to validate the underlying demand through an
-          existing, high volume channel.
-        </Prose>
-        <Prose>
-          The Intent Capture experiment required a small change to an existing
-          WhatsApp lead flow, allowing us to observe seller intent without
-          introducing a new acquisition journey or significant operational
-          complexity.
-        </Prose>
-        <Prose>
-          The result gave the team enough evidence to move from asking whether
-          seller demand existed to designing how that demand could become a
-          structured marketplace supply system.
-        </Prose>
-      </CaseSection>
-
-      <section className="mb-8">
+      <section>
         <SectionTitle>The System</SectionTitle>
-        <DiagramCard>
-          <StepFlow />
-        </DiagramCard>
-        <DetailCards cards={PILLARS} />
+        <div className="space-y-5">
+          <DiagramCard>
+            <Stepper label="How the Seller Leads Marketplace works" steps={STEPS} />
+          </DiagramCard>
+          <DetailCards cards={CARDS} />
+        </div>
       </section>
 
-      <CaseSection title="How the System Behaves">
+      <Callout title="What Didn’t Work">
         <Prose>
-          The system was designed as a progression rather than a single feature.
+          Early on, some entry points were tuned for volume. They produced
+          plenty of leads, but too many owners had not really asked to be
+          contacted. We switched to an explicit opt-in. Fewer leads came in, and
+          more of them were real.
         </Prose>
-        <Prose>
-          Intent Capture identified potential seller demand. Qualification
-          converted that signal into usable supply. The marketplace then
-          distributed qualified leads to brokers, while the unlock model
-          controlled access and created a mechanism for monetization.
-        </Prose>
-        <Prose>
-          As more qualified supply entered the system, marketplace liquidity
-          increased. This created a feedback loop between seller demand,
-          available inventory and broker participation.
-        </Prose>
-        <Prose>
-          The important shift was from capturing an isolated signal to building
-          a system that could continuously convert that signal into marketplace
-          supply.
-        </Prose>
-      </CaseSection>
+      </Callout>
+
+      <TradeOffs items={TRADE_OFFS} />
 
       <OutcomeCard stat="8K+">
-        Seller leads generated in the first four months of the program. It
-        validated the Intent Capture hypothesis at scale and turned one
-        experiment into an ongoing supply engine for the marketplace.
+        Seller leads generated in the first four months. One experiment became
+        an ongoing supply of owner leads for agencies, with capture,
+        qualification, access and pricing running as one system.
       </OutcomeCard>
+
+      <MyRoleCard>
+        <Prose>
+          I work on the marketplace side: the roadmap, the analytics behind it,
+          and the features that shape how agencies buy, from access rules to
+          refunds and pricing.
+        </Prose>
+      </MyRoleCard>
+
+      <Callout title="What I’d Do Differently">
+        <Prose>
+          Define the downstream metric earlier. We measured leads and unlocks
+          well, but tracking whether an unlocked lead became a listing would
+          have told us more about value, sooner.
+        </Prose>
+      </Callout>
+
+      <CaseNav id="seller-leads" />
     </CaseStudyPage>
   );
 }

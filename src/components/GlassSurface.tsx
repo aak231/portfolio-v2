@@ -17,7 +17,7 @@ export default function GlassSurface({
         bg-zinc-800/40
         backdrop-blur-lg
         backdrop-saturate-150
-        border-white/10
+        border border-line
         shadow-[0_20px_60px_rgba(0,0,0,0.45)]
         overflow-hidden
         ${className}
