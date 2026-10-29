@@ -10,6 +10,7 @@ type Node = {
 };
 
 const NODE_POOL_SIZE = 300;
+const MIN_ACTIVE = 60;
 
 /**
  * Constellation background, confined to its parent (the hero section).
@@ -123,23 +124,30 @@ export default function DecisionField() {
       const delta = lastTime ? time - lastTime : 0;
       lastTime = time;
 
-      if (delta > 0) {
+      // A gap this long is a tab that was hidden or throttled, not a slow device.
+      if (delta > 0 && delta < 250) {
         fps.push(1000 / delta);
         if (fps.length > 30) fps.shift();
         const avg = fps.reduce((a, b) => a + b, 0) / fps.length;
-        if (avg < 50 && active > 60) active -= 5;
-        else if (avg > 58 && active < maxNodes) active += 2;
+        if (avg < 50) active = Math.max(MIN_ACTIVE, active - 5);
+        else if (avg > 58) active = Math.min(maxNodes, active + 2);
       }
 
-      step();
-      draw();
+      // Never let a bad frame kill the loop: it would not be rescheduled.
+      try {
+        step();
+        draw();
+      } catch (err) {
+        console.error("DecisionField frame failed", err);
+      }
       rafId = requestAnimationFrame(loop);
     };
 
     const start = () => {
-      if (running || reduced) return;
+      if (running || reduced || document.hidden) return;
       running = true;
       lastTime = 0;
+      fps.length = 0;
       rafId = requestAnimationFrame(loop);
     };
 
@@ -212,21 +220,29 @@ export default function DecisionField() {
     resizeObserver.observe(parent);
     resize();
 
+    let inView = false;
+    const sync = () => {
+      if (inView && !document.hidden) start();
+      else stop();
+    };
+
     let intersection: IntersectionObserver | undefined;
     if (!reduced) {
       parent.addEventListener("mousemove", onMove);
       parent.addEventListener("mouseleave", onLeave);
-      intersection = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) start();
-        else stop();
+      intersection = new IntersectionObserver((entries) => {
+        inView = entries[entries.length - 1].isIntersecting;
+        sync();
       });
       intersection.observe(parent);
+      document.addEventListener("visibilitychange", sync);
     }
 
     return () => {
       stop();
       resizeObserver.disconnect();
       intersection?.disconnect();
+      document.removeEventListener("visibilitychange", sync);
       parent.removeEventListener("mousemove", onMove);
       parent.removeEventListener("mouseleave", onLeave);
     };
